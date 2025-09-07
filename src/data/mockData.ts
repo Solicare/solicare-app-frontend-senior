@@ -44,7 +44,14 @@ export const mockExerciseData = {
   ]
 };
 
-export const mockChatHistory = [
+interface Message {
+  id: number;
+  type: 'user' | 'ai';
+  message: string;
+  timestamp: string;
+}
+
+export const mockChatHistory: Message[] = [
   {
     id: 1,
     type: 'user',
@@ -70,3 +77,4 @@ export const mockChatHistory = [
     timestamp: '2024-01-15 10:33'
   }
 ];
+

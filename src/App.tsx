@@ -9,7 +9,7 @@ import ExercisePage from './pages/ExercisePage';
 import ChatPage from './pages/ChatPage';
 import './App.css';
 
-function App() {
+const App: React.FC = () => {
   return (
     <AuthProvider>
       <Router>
