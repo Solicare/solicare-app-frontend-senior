@@ -1,67 +1,77 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
+import {
+  BrowserRouter as Router,
+  Navigate,
+  Route,
+  Routes,
+} from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 import LoginPage from './pages/LoginPage';
 import Dashboard from './pages/Dashboard';
 import MedicationPage from './pages/MedicationPage';
 import ExercisePage from './pages/ExercisePage';
 import ChatPage from './pages/ChatPage';
-import './App.css';
+import HomePage from './pages/HomePage';
+import { ThemeProvider } from 'styled-components';
+import GlobalStyle from './styles/GlobalStyle';
+import { theme } from './styles/theme';
 
 const App: React.FC = () => {
   return (
-    <AuthProvider>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
       <Router>
         <div className="App">
           <Routes>
+            <Route path="/" element={<Navigate to="/start" replace />} />
+            <Route path="/start" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route 
-              path="/" 
+            <Route
+              path="/dashboard"
               element={
                 <ProtectedRoute>
                   <Dashboard />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/medication" 
+            <Route
+              path="/medication"
               element={
                 <ProtectedRoute>
                   <MedicationPage />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/medication/history" 
+            <Route
+              path="/medication/history"
               element={
                 <ProtectedRoute>
                   <MedicationPage />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/exercise" 
+            <Route
+              path="/exercise"
               element={
                 <ProtectedRoute>
                   <ExercisePage />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/chat" 
+            <Route
+              path="/chat"
               element={
                 <ProtectedRoute>
                   <ChatPage />
                 </ProtectedRoute>
-              } 
+              }
             />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
       </Router>
-    </AuthProvider>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;

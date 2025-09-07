@@ -2,9 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { mockChatHistory } from '../data/mockData';
 import styled from 'styled-components';
-import {
-  NavButton,
-} from '../components/StyledComponents';
+import { NavButton } from '../components/StyledComponents';
 
 interface Message {
   id: number;
@@ -61,11 +59,14 @@ const MessageBubble = styled.div<{ type: 'user' | 'ai' }>`
   line-height: 1.4;
   font-size: 16px;
 
-  background-color: ${props => (props.type === 'user' ? '#007bff' : '#e9ecef')};
-  color: ${props => (props.type === 'user' ? 'white' : '#333')};
-  align-self: ${props => (props.type === 'user' ? 'flex-end' : 'flex-start')};
-  border-bottom-right-radius: ${props => (props.type === 'user' ? '5px' : '20px')};
-  border-bottom-left-radius: ${props => (props.type === 'user' ? '20px' : '5px')};
+  background-color: ${(props) =>
+    props.type === 'user' ? '#007bff' : '#e9ecef'};
+  color: ${(props) => (props.type === 'user' ? 'white' : '#333')};
+  align-self: ${(props) => (props.type === 'user' ? 'flex-end' : 'flex-start')};
+  border-bottom-right-radius: ${(props) =>
+    props.type === 'user' ? '5px' : '20px'};
+  border-bottom-left-radius: ${(props) =>
+    props.type === 'user' ? '20px' : '5px'};
 `;
 
 const MessageText = styled.div`
@@ -123,7 +124,9 @@ const SendButton = styled.button<{ disabled?: boolean }>`
   cursor: pointer;
   background-color: #007bff;
   color: white;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 
   &:hover {
     background-color: #0056b3;
@@ -163,7 +166,9 @@ const QuickQuestionButton = styled.button`
   color: #007bff;
   font-size: 14px;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 
   &:hover {
     background-color: #007bff;
@@ -181,12 +186,11 @@ const ChatPage: React.FC = () => {
   const navigate = useNavigate();
   const [messages, setMessages] = useState<Message[]>(mockChatHistory);
   const [inputMessage, setInputMessage] = useState<string>('');
-  const [isListening, setIsListening] = useState<boolean>(false);
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(() => {
@@ -200,10 +204,10 @@ const ChatPage: React.FC = () => {
       id: Date.now(),
       type: 'user',
       message: inputMessage,
-      timestamp: new Date().toLocaleString('ko-KR')
+      timestamp: new Date().toLocaleString('ko-KR'),
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInputMessage('');
     setIsTyping(true);
 
@@ -214,21 +218,21 @@ const ChatPage: React.FC = () => {
         id: Date.now() + 1,
         type: 'ai',
         message: aiResponse,
-        timestamp: new Date().toLocaleString('ko-KR')
+        timestamp: new Date().toLocaleString('ko-KR'),
       };
-      
-      setMessages(prev => [...prev, aiMessage]);
+
+      setMessages((prev) => [...prev, aiMessage]);
       setIsTyping(false);
     }, 1500);
   };
 
   const generateAIResponse = (userInput: string) => {
     const input = userInput.toLowerCase();
-    
+
     if (input.includes('약') || input.includes('복용')) {
-      return '네, 약물 복용에 대해 도움을 드리겠습니다. 현재 혈압약은 복용하셨고, 당뇨약과 비타민은 아직 복용하지 않으셨습니다. 궁금한 점이 있으시면 언제든 말씀해 주세요.';
+      return '네, 약물 복용에 대해 도움을 드리겠습니다. 현재 혈압약은 복용하셨고, 당뇨약과 비타민은 아직 복��하지 않으셨습니다. 궁금한 점이 있으시면 언제든 말씀해 주세요.';
     } else if (input.includes('운동') || input.includes('걸음')) {
-      return '오늘은 3,240보를 걸으셨고, 2.1km를 이동하셨습니다. 총 25분간 운동하셨네요. 정말 좋습니다! 규칙적인 운동을 계속하시면 건강에 도움이 됩니다.';
+      return '오늘은 3,240보를 걸으셨고, 2.1km를 이동하셨습니다. 총 25분간 운동하셨네요. 정말 좋습니다! 규칙적인 운동을 계속하시면 ��강에 도움이 됩니다.';
     } else if (input.includes('건강') || input.includes('상태')) {
       return '현재 건강 상태를 확인해보니 약물 복용도 잘 하고 계시고, 운동도 꾸준히 하고 계시네요. 계속 이렇게 관리하시면 건강한 생활을 유지하실 수 있을 것 같습니다.';
     } else if (input.includes('안녕') || input.includes('인사')) {
@@ -275,9 +279,7 @@ const ChatPage: React.FC = () => {
         ))}
 
         {isTyping && (
-          <TypingIndicator>
-            AI가 답변을 준비하고 있습니다...
-          </TypingIndicator>
+          <TypingIndicator>AI가 답변을 준비하고 있습니다...</TypingIndicator>
         )}
 
         <div ref={messagesEndRef} />
@@ -319,4 +321,3 @@ const ChatPage: React.FC = () => {
 };
 
 export default ChatPage;
-

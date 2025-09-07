@@ -1,13 +1,5 @@
-import React, { useState } from 'const MedicationHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 40px;
-  background-color: white;
-  padding: 28px 35px;
-  border-radius: 16px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-`;mport { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { mockMedications } from '../data/mockData';
 import styled from 'styled-components';
 import {
@@ -410,4 +402,3 @@ const MedicationPage: React.FC = () => {
 };
 
 export default MedicationPage;
-

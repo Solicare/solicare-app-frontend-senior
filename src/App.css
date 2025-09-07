@@ -9,12 +9,13 @@
 }
 
 /* 카드가 잘리지 않도록 padding 및 box-sizing 적용 */
-.medication-card, .MedicationItemCard {
+.medication-card,
+.MedicationItemCard {
   box-sizing: border-box;
   padding: 20px;
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   min-height: 160px;
   display: flex;
   flex-direction: column;
@@ -26,9 +27,6 @@
     grid-template-columns: 1fr;
   }
 }
-.App {
-  background-color: #f8f9fa;
-}
 
 * {
   box-sizing: border-box;
@@ -36,15 +34,15 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #f8f9fa;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family:
+    source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }

@@ -25,15 +25,17 @@ export const formatTimeRemaining = (time: string): string => {
   }
 };
 
-export const getTimeStatus = (time: string): 'upcoming' | 'current' | 'overdue' => {
+export const getTimeStatus = (
+  time: string
+): 'upcoming' | 'current' | 'overdue' => {
   const now = new Date();
   const [hours, minutes] = time.split(':').map(Number);
   const medTime = new Date();
   medTime.setHours(hours, minutes, 0, 0);
-  
+
   const diff = now.getTime() - medTime.getTime();
   const diffHours = diff / (1000 * 60 * 60);
-  
+
   if (diffHours < 0) return 'upcoming';
   if (diffHours < 1) return 'current';
   return 'overdue';

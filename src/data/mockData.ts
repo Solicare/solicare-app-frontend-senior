@@ -6,7 +6,7 @@ export const mockMedications = [
     time: '08:00',
     taken: true,
     dosage: '1정',
-    note: '식전 복용'
+    note: '식전 복용',
   },
   {
     id: 2,
@@ -14,7 +14,7 @@ export const mockMedications = [
     time: '12:00',
     taken: false,
     dosage: '1정',
-    note: '식후 복용'
+    note: '식후 복용',
   },
   {
     id: 3,
@@ -22,7 +22,7 @@ export const mockMedications = [
     time: '18:00',
     taken: false,
     dosage: '1정',
-    note: '식후 복용'
+    note: '식후 복용',
   },
   {
     id: 4,
@@ -30,8 +30,8 @@ export const mockMedications = [
     time: '21:00',
     taken: false,
     dosage: '1정',
-    note: '취침 30분 전 복용'
-  }
+    note: '취침 30분 전 복용',
+  },
 ];
 
 export const mockExerciseData = {
@@ -39,7 +39,7 @@ export const mockExerciseData = {
     steps: 3240,
     distance: '2.1km',
     calories: 156,
-    duration: '25분'
+    duration: '25분',
   },
   weekly: [
     { day: '월', steps: 2800, duration: '20분' },
@@ -48,8 +48,8 @@ export const mockExerciseData = {
     { day: '목', steps: 3500, duration: '28분' },
     { day: '금', steps: 3100, duration: '24분' },
     { day: '토', steps: 2800, duration: '20분' },
-    { day: '일', steps: 3240, duration: '25분' }
-  ]
+    { day: '일', steps: 3240, duration: '25분' },
+  ],
 };
 
 interface Message {
@@ -64,25 +64,26 @@ export const mockChatHistory: Message[] = [
     id: 1,
     type: 'user',
     message: '오늘 약을 먹었는지 확인해주세요',
-    timestamp: '2024-01-15 10:30'
+    timestamp: '2024-01-15 10:30',
   },
   {
     id: 2,
     type: 'ai',
-    message: '네, 확인해드리겠습니다. 오늘 아침 혈압약은 복용하셨고, 점심 당뇨약과 저녁 비타민은 아직 복용하지 않으셨습니다.',
-    timestamp: '2024-01-15 10:31'
+    message:
+      '네, 확인해드리겠습니다. 오늘 아침 혈압약은 복용하셨고, 점심 당뇨약과 저녁 비타민은 아직 복용하지 않으셨습니다.',
+    timestamp: '2024-01-15 10:31',
   },
   {
     id: 3,
     type: 'user',
     message: '운동은 얼마나 했나요?',
-    timestamp: '2024-01-15 10:32'
+    timestamp: '2024-01-15 10:32',
   },
   {
     id: 4,
     type: 'ai',
-    message: '오늘은 3,240보를 걸으셨고, 2.1km를 이동하셨습니다. 총 25분간 운동하셨네요. 정말 좋습니다!',
-    timestamp: '2024-01-15 10:33'
-  }
+    message:
+      '오늘은 3,240보를 걸으셨고, 2.1km를 이동하셨습니다. 총 25분간 운동하셨네요. 정말 좋습니다!',
+    timestamp: '2024-01-15 10:33',
+  },
 ];
-

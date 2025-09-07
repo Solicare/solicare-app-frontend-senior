@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { mockExerciseData } from '../data/mockData';
 import styled from 'styled-components';
-import {
-  NavButton,
-} from '../components/StyledComponents';
+import { NavButton } from '../components/StyledComponents';
 
 const CardTitle = styled.h3`
   font-size: 22px;
@@ -61,7 +59,7 @@ const SummaryGrid = styled.div`
   grid-template-columns: repeat(4, 1fr);
   gap: 32px;
   margin: 40px 0;
-  
+
   @media (max-width: 1200px) {
     grid-template-columns: repeat(2, 1fr);
     gap: 24px;
@@ -94,7 +92,7 @@ const CardIcon = styled.span`
 const CardValue = styled.p<{ color?: string }>`
   font-size: 42px;
   font-weight: bold;
-  color: ${props => props.color || '#343a40'};
+  color: ${(props) => props.color || '#343a40'};
   margin: 0;
 `;
 
@@ -119,7 +117,7 @@ const ProgressBarContainer = styled.div`
 
 const ProgressBar = styled.div<{ percentage: number }>`
   height: 100%;
-  width: ${props => props.percentage}%;
+  width: ${(props) => props.percentage}%;
   background-color: #28a745;
   border-radius: 8px;
   transition: width 0.5s ease-in-out;
@@ -141,7 +139,9 @@ const ActionButton = styled.button`
   cursor: pointer;
   background-color: #007bff;
   color: white;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 
   &:hover {
     background-color: #0056b3;
@@ -213,7 +213,7 @@ const DailyRecordItem = styled.div<{ isToday: boolean }>`
   justify-content: space-between;
   align-items: center;
   padding: 15px;
-  background-color: ${props => (props.isToday ? '#e3f2fd' : '#f8f9fa')};
+  background-color: ${(props) => (props.isToday ? '#e3f2fd' : '#f8f9fa')};
   border-radius: 8px;
   margin-bottom: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
@@ -271,7 +271,7 @@ const GoalProgressBarWithText = styled.div<{ percentage: number }>`
   overflow: hidden;
 
   &::before {
-    content: '${props => props.percentage}%';
+    content: '${(props) => props.percentage}%';
     position: absolute;
     left: 50%;
     top: 50%;
@@ -283,7 +283,7 @@ const GoalProgressBarWithText = styled.div<{ percentage: number }>`
 
   & > div {
     height: 100%;
-    width: ${props => props.percentage}%;
+    width: ${(props) => props.percentage}%;
     background-color: #28a745;
     border-radius: 15px;
     transition: width 0.5s ease-in-out;
@@ -323,14 +323,19 @@ const ExercisePage: React.FC = () => {
           <SummaryGrid>
             <ExerciseCard>
               <CardIcon>👟</CardIcon>
-              <CardValue color="#28a745">{today.steps.toLocaleString()}</CardValue>
+              <CardValue color="#28a745">
+                {today.steps.toLocaleString()}
+              </CardValue>
               <CardUnit>보</CardUnit>
               <ProgressWrapper>
                 <ProgressBarContainer>
-                  <ProgressBar percentage={Math.min(getStepPercentage(), 100)} />
+                  <ProgressBar
+                    percentage={Math.min(getStepPercentage(), 100)}
+                  />
                 </ProgressBarContainer>
                 <ProgressText>
-                  목표: {getStepGoal().toLocaleString()}보 ({Math.round(getStepPercentage())}%)
+                  목표: {getStepGoal().toLocaleString()}보 (
+                  {Math.round(getStepPercentage())}%)
                 </ProgressText>
               </ProgressWrapper>
             </ExerciseCard>
@@ -357,13 +362,40 @@ const ExercisePage: React.FC = () => {
           <TipCard style={{ marginTop: '32px', padding: '40px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '60px' }}>
               <div style={{ flex: '1.2' }}>
-                <SectionTitle style={{ marginTop: 0, fontSize: '24px', marginBottom: '24px' }}>💡 오늘의 운동 팁</SectionTitle>
-                <TipItem style={{ fontSize: '18px', marginBottom: '16px' }}>• 아침에 10분씩 스트레칭을 해보세요</TipItem>
-                <TipItem style={{ fontSize: '18px', marginBottom: '16px' }}>• 계단을 이용해 다리 근육을 강화하세요</TipItem>
-                <TipItem style={{ fontSize: '18px' }}>• 물을 충분히 마시며 운동하세요</TipItem>
+                <SectionTitle
+                  style={{
+                    marginTop: 0,
+                    fontSize: '24px',
+                    marginBottom: '24px',
+                  }}
+                >
+                  💡 오늘의 운동 팁
+                </SectionTitle>
+                <TipItem style={{ fontSize: '18px', marginBottom: '16px' }}>
+                  • 아침에 10분씩 스트레칭을 해보세요
+                </TipItem>
+                <TipItem style={{ fontSize: '18px', marginBottom: '16px' }}>
+                  • 계단을 이용해 다리 근육을 강화하세요
+                </TipItem>
+                <TipItem style={{ fontSize: '18px' }}>
+                  • 물을 충분히 마시며 운동하세요
+                </TipItem>
               </div>
-              <div style={{ flex: '0.8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <ActionButton style={{ maxWidth: '320px', padding: '20px', fontSize: '20px' }}>
+              <div
+                style={{
+                  flex: '0.8',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <ActionButton
+                  style={{
+                    maxWidth: '320px',
+                    padding: '20px',
+                    fontSize: '20px',
+                  }}
+                >
                   운동 시작하기
                 </ActionButton>
               </div>
@@ -379,13 +411,19 @@ const ExercisePage: React.FC = () => {
             <WeeklySummaryItem>
               <WeeklySummaryLabel>총 걸음수</WeeklySummaryLabel>
               <WeeklySummaryValue>
-                {weekly.reduce((sum, day) => sum + day.steps, 0).toLocaleString()}보
+                {weekly
+                  .reduce((sum, day) => sum + day.steps, 0)
+                  .toLocaleString()}
+                보
               </WeeklySummaryValue>
             </WeeklySummaryItem>
             <WeeklySummaryItem>
               <WeeklySummaryLabel>평균 걸음수</WeeklySummaryLabel>
               <WeeklySummaryValue>
-                {Math.round(weekly.reduce((sum, day) => sum + day.steps, 0) / 7).toLocaleString()}보
+                {Math.round(
+                  weekly.reduce((sum, day) => sum + day.steps, 0) / 7
+                ).toLocaleString()}
+                보
               </WeeklySummaryValue>
             </WeeklySummaryItem>
             <WeeklySummaryItem>
@@ -406,7 +444,9 @@ const ExercisePage: React.FC = () => {
                 </DayInfo>
                 <StepsInfo>
                   <StepsText>{day.steps.toLocaleString()}보</StepsText>
-                  <StepsPercentage>{Math.round((day.steps / getStepGoal()) * 100)}%</StepsPercentage>
+                  <StepsPercentage>
+                    {Math.round((day.steps / getStepGoal()) * 100)}%
+                  </StepsPercentage>
                 </StepsInfo>
               </DailyRecordItem>
             ))}
@@ -426,4 +466,3 @@ const ExercisePage: React.FC = () => {
 };
 
 export default ExercisePage;
-

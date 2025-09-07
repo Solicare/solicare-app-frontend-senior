@@ -1,69 +1,73 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const LoginPageContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-height: 100vh;
-  background-color: #f0f2f5;
-  padding: 20px;
-  box-sizing: border-box;
+  background-color: #f7f9fb;
+  font-family: 'Pretendard', 'Roboto', 'Noto Sans KR', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `;
 
 const LoginCard = styled.div`
-  background: white;
-  border-radius: 12px;
-  padding: 40px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 450px;
+  background: #fff;
+  border-radius: 32px;
+  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.1);
+  width: 100vw;
+  max-width: 520px;
+  padding: 64px 48px 48px 48px;
   text-align: center;
+  margin: 0 auto;
 `;
 
 const Title = styled.h2`
-  font-size: 28px;
-  color: #333;
-  margin-bottom: 30px;
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #2563eb;
+  margin-bottom: 32px;
 `;
 
 const Input = styled.input`
   width: 100%;
-  padding: 15px;
-  margin-bottom: 20px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 16px;
+  padding: 22px;
+  margin-bottom: 24px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 14px;
+  font-size: 1.25rem;
+  background: #f7f9fb;
   transition: border-color 0.3s ease;
 
   &:focus {
-    border-color: #007bff;
+    border-color: #2563eb;
     outline: none;
   }
 `;
 
-const Button = styled.button<{ variant?: 'primary' | 'secondary'; disabled?: boolean }>`
+const Button = styled.button<{
+  variant?: 'primary' | 'secondary';
+  disabled?: boolean;
+}>`
   width: 100%;
-  padding: 15px;
+  padding: 22px;
   border: none;
-  border-radius: 8px;
-  font-size: 18px;
-  font-weight: bold;
+  border-radius: 14px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  background-color: ${(props) =>
+    props.variant === 'secondary' ? '#e0e0e0' : '#2563eb'};
+  color: ${(props) => (props.variant === 'secondary' ? '#222' : '#fff')};
+  margin-top: ${(props) => (props.variant === 'secondary' ? '18px' : '0')};
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-
-  background-color: ${props => (props.variant === 'secondary' ? '#6c757d' : '#007bff')};
-  color: white;
-  margin-top: ${props => (props.variant === 'secondary' ? '15px' : '0')};
+  transition: background 0.2s;
 
   &:hover {
-    transform: translateY(-2px);
-    background-color: ${props => (props.variant === 'secondary' ? '#5a6268' : '#0056b3')};
-  }
-
-  &:active {
-    transform: translateY(0);
+    background-color: ${(props) =>
+      props.variant === 'secondary' ? '#d1d5db' : '#1746a0'};
   }
 
   &:disabled {
@@ -76,14 +80,14 @@ const Button = styled.button<{ variant?: 'primary' | 'secondary'; disabled?: boo
 
 const ErrorText = styled.p`
   color: #e74c3c;
-  font-size: 14px;
+  font-size: 1.1rem;
   margin-bottom: 20px;
 `;
 
 const ToggleText = styled.p`
-  font-size: 16px;
+  font-size: 1.15rem;
   color: #555;
-  margin-top: 25px;
+  margin-top: 28px;
 `;
 
 const LoginPage: React.FC = () => {
@@ -92,21 +96,39 @@ const LoginPage: React.FC = () => {
     username: '',
     password: '',
     name: '',
-    email: ''
+    email: '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login, signup } = useAuth();
+  const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
     setError('');
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    try {
+      const res = await login(formData.username, formData.password);
+      if (res.success) {
+        navigate('/dashboard', { replace: true });
+      } else {
+        setError(res.error || '로그인 실패');
+      }
+    } catch {
+      setError('로그인 중 오류 발생');
+    }
+    setLoading(false);
+  };
+
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
@@ -120,9 +142,11 @@ const LoginPage: React.FC = () => {
       }
 
       if (!result.success) {
-        setError(result.error ?? '로그인 또는 회원가입 중 오류가 발생했습니다.');
+        setError(
+          result.error ?? '로그인 또는 회원가입 중 오류가 발생했습니다.'
+        );
       }
-    } catch (err) {
+    } catch {
       setError('오류가 발생했습니다. 다시 시도해주세요.');
     } finally {
       setLoading(false);
@@ -136,7 +160,7 @@ const LoginPage: React.FC = () => {
 
         {error && <ErrorText>{error}</ErrorText>}
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={isLogin ? handleLogin : handleSignup}>
           {!isLogin && (
             <>
               <Input
@@ -177,7 +201,7 @@ const LoginPage: React.FC = () => {
           />
 
           <Button type="submit" disabled={loading}>
-            {loading ? '처리중...' : (isLogin ? '로그인' : '회원가입')}
+            {loading ? '처리중...' : isLogin ? '로그인' : '회원가입'}
           </Button>
         </form>
 
@@ -201,4 +225,3 @@ const LoginPage: React.FC = () => {
 };
 
 export default LoginPage;
-

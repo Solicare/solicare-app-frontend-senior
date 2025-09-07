@@ -2,10 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { mockMedications } from '../data/mockData';
 import styled from 'styled-components';
-import {
-  StatusBadge,
-  NavButton,
-} from '../components/StyledComponents';
+import { StatusBadge, NavButton } from '../components/StyledComponents';
 
 interface MedicationItemProps {
   taken: boolean;
@@ -93,7 +90,7 @@ const MedicationProgress = styled.div`
 
 const MedicationProgressBar = styled.div<{ progress: number }>`
   height: 100%;
-  width: ${props => props.progress}%;
+  width: ${(props) => props.progress}%;
   background-color: #28a745;
   border-radius: 15px;
   transition: width 0.5s ease-in-out;
@@ -162,13 +159,13 @@ const MedicationButton = styled.button<{ taken: boolean }>`
   font-size: 18px;
   font-weight: 600;
   color: white;
-  background-color: ${props => props.taken ? '#6c757d' : '#007bff'};
+  background-color: ${(props) => (props.taken ? '#6c757d' : '#007bff')};
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 
   &:hover {
     transform: translateY(-2px);
-    background-color: ${props => props.taken ? '#5a6268' : '#0056b3'};
+    background-color: ${(props) => (props.taken ? '#5a6268' : '#0056b3')};
   }
 
   &:active {
@@ -212,7 +209,9 @@ const HistoryMedList = styled.div`
   justify-content: flex-end;
 `;
 
-const HistoryStatusBadge = styled(StatusBadge)<{ status: 'taken' | 'not-taken' }>`
+const HistoryStatusBadge = styled(StatusBadge)<{
+  status: 'taken' | 'not-taken';
+}>`
   padding: 6px 12px;
   font-size: 14px;
   border-radius: 16px;
@@ -251,12 +250,14 @@ const MedicationPage: React.FC = () => {
   const [showHistory, setShowHistory] = useState(false);
 
   const toggleMedication = (id: number) => {
-    setMedications(medications.map(med => 
-      med.id === id ? { ...med, taken: !med.taken } : med
-    ));
+    setMedications(
+      medications.map((med) =>
+        med.id === id ? { ...med, taken: !med.taken } : med
+      )
+    );
   };
 
-  const takenCount = medications.filter(med => med.taken).length;
+  const takenCount = medications.filter((med) => med.taken).length;
   const totalCount = medications.length;
 
   const getTimeStatus = (time: string) => {
@@ -264,10 +265,10 @@ const MedicationPage: React.FC = () => {
     const [hours, minutes] = time.split(':').map(Number);
     const medTime = new Date();
     medTime.setHours(hours, minutes, 0, 0);
-    
+
     const diff = now.getTime() - medTime.getTime();
     const diffHours = diff / (1000 * 60 * 60);
-    
+
     if (diffHours < 0) return 'upcoming';
     if (diffHours < 1) return 'current';
     return 'overdue';
@@ -296,30 +297,34 @@ const MedicationPage: React.FC = () => {
               {takenCount} / {totalCount}
             </SummaryValue>
             <MedicationProgress>
-              <MedicationProgressBar progress={(takenCount / totalCount) * 100} />
+              <MedicationProgressBar
+                progress={(takenCount / totalCount) * 100}
+              />
             </MedicationProgress>
           </MedicationSummaryCard>
 
           {/* 약물 목록 */}
           <MedicationGrid>
-            {medications.map(medication => {
+            {medications.map((medication) => {
               const timeStatus = getTimeStatus(medication.time);
               return (
                 <MedicationCard key={medication.id} taken={medication.taken}>
                   <MedicationContent>
                     <MedicationName>{medication.name}</MedicationName>
-                    <MedicationTimeDosage>⏰ {medication.time} • {medication.dosage}</MedicationTimeDosage>
+                    <MedicationTimeDosage>
+                      ⏰ {medication.time} • {medication.dosage}
+                    </MedicationTimeDosage>
                     <MedicationNote>{medication.note}</MedicationNote>
                   </MedicationContent>
                   <div style={{ marginTop: 'auto' }}>
                     <BadgeContainer>
-                      <StatusBadge status={medication.taken ? 'taken' : 'not-taken'}>
+                      <StatusBadge
+                        status={medication.taken ? 'taken' : 'not-taken'}
+                      >
                         {medication.taken ? '복용완료' : '미복용'}
                       </StatusBadge>
                       {timeStatus === 'overdue' && !medication.taken && (
-                        <StatusBadge status="not-taken">
-                          시간 지남
-                        </StatusBadge>
+                        <StatusBadge status="not-taken">시간 지남</StatusBadge>
                       )}
                     </BadgeContainer>
                     <MedicationButton
@@ -339,14 +344,20 @@ const MedicationPage: React.FC = () => {
           <MedicationSectionTitle>복용 기록</MedicationSectionTitle>
 
           <HistoryCard>
-            <MediumText>지난 7일간의 복용 기록</MediumText>
+            <MediumText>지난 7일간의 복용 ��록</MediumText>
             {['월', '화', '수', '목', '금', '토', '일'].map((day, index) => (
               <HistoryItem key={day}>
                 <HistoryDay>{day}요일</HistoryDay>
                 <HistoryMedList>
-                  <HistoryStatusBadge status="taken">혈압약 ✓</HistoryStatusBadge>
-                  <HistoryStatusBadge status="taken">당뇨약 ✓</HistoryStatusBadge>
-                  <HistoryStatusBadge status={index > 3 ? 'taken' : 'not-taken'}>
+                  <HistoryStatusBadge status="taken">
+                    혈압약 ✓
+                  </HistoryStatusBadge>
+                  <HistoryStatusBadge status="taken">
+                    당뇨약 ✓
+                  </HistoryStatusBadge>
+                  <HistoryStatusBadge
+                    status={index > 3 ? 'taken' : 'not-taken'}
+                  >
                     비타민 {index > 3 ? '✓' : '✗'}
                   </HistoryStatusBadge>
                 </HistoryMedList>

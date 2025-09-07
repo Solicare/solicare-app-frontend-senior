@@ -38,8 +38,9 @@ export const StatusBadge = styled.span<StatusBadgeProps>`
   border-radius: 20px;
   font-size: 16px;
   font-weight: bold;
-  background-color: ${props => props.status === 'taken' ? '#d4edda' : '#f8d7da'};
-  color: ${props => props.status === 'taken' ? '#155724' : '#721c24'};
+  background-color: ${(props) =>
+    props.status === 'taken' ? '#d4edda' : '#f8d7da'};
+  color: ${(props) => (props.status === 'taken' ? '#155724' : '#721c24')};
 `;
 
 // Navigation
@@ -48,7 +49,7 @@ export const NavContainer = styled.nav`
   padding: 20px;
   border-radius: 15px;
   margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
 export const NavButton = styled.button`
@@ -76,4 +77,3 @@ export const LoadingSpinner = styled.div`
   font-size: 20px;
   color: #007bff;
 `;
-

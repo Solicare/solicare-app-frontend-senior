@@ -2,10 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { mockMedications } from '../data/mockData';
 import styled from 'styled-components';
-import {
-  StatusBadge,
-  NavButton,
-} from '../components/StyledComponents';
+import { StatusBadge, NavButton } from '../components/StyledComponents';
 
 interface MedicationItemProps {
   taken: boolean;
@@ -100,7 +97,7 @@ const MedicationProgress = styled.div`
 
 const MedicationProgressBar = styled.div<{ progress: number }>`
   height: 100%;
-  width: ${props => props.progress}%;
+  width: ${(props) => props.progress}%;
   background-color: #28a745;
   border-radius: 12px;
   transition: width 0.5s ease-in-out;
@@ -164,13 +161,13 @@ const MedicationButton = styled.button<{ taken: boolean }>`
   font-size: 18px;
   font-weight: 600;
   color: white;
-  background-color: ${props => props.taken ? '#6c757d' : '#007bff'};
+  background-color: ${(props) => (props.taken ? '#6c757d' : '#007bff')};
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 
   &:hover {
     transform: translateY(-2px);
-    background-color: ${props => props.taken ? '#5a6268' : '#0056b3'};
+    background-color: ${(props) => (props.taken ? '#5a6268' : '#0056b3')};
   }
 
   &:active {
@@ -214,7 +211,9 @@ const HistoryMedList = styled.div`
   justify-content: flex-end;
 `;
 
-const HistoryStatusBadge = styled(StatusBadge)<{ status: 'taken' | 'not-taken' }>`
+const HistoryStatusBadge = styled(StatusBadge)<{
+  status: 'taken' | 'not-taken';
+}>`
   padding: 6px 12px;
   font-size: 14px;
   border-radius: 16px;
@@ -253,12 +252,14 @@ const MedicationPage: React.FC = () => {
   const [showHistory, setShowHistory] = useState(false);
 
   const toggleMedication = (id: number) => {
-    setMedications(medications.map(med => 
-      med.id === id ? { ...med, taken: !med.taken } : med
-    ));
+    setMedications(
+      medications.map((med) =>
+        med.id === id ? { ...med, taken: !med.taken } : med
+      )
+    );
   };
 
-  const takenCount = medications.filter(med => med.taken).length;
+  const takenCount = medications.filter((med) => med.taken).length;
   const totalCount = medications.length;
 
   const getTimeStatus = (time: string) => {
@@ -266,10 +267,10 @@ const MedicationPage: React.FC = () => {
     const [hours, minutes] = time.split(':').map(Number);
     const medTime = new Date();
     medTime.setHours(hours, minutes, 0, 0);
-    
+
     const diff = now.getTime() - medTime.getTime();
     const diffHours = diff / (1000 * 60 * 60);
-    
+
     if (diffHours < 0) return 'upcoming';
     if (diffHours < 1) return 'current';
     return 'overdue';
@@ -299,39 +300,49 @@ const MedicationPage: React.FC = () => {
                 {takenCount} / {totalCount}
               </SummaryValue>
               <MedicationProgress>
-                <MedicationProgressBar progress={(takenCount / totalCount) * 100} />
+                <MedicationProgressBar
+                  progress={(takenCount / totalCount) * 100}
+                />
               </MedicationProgress>
-              <div style={{ 
-                marginTop: '20px',
-                fontSize: '16px',
-                color: '#666',
-                padding: '12px',
-                background: '#f8f9fa',
-                borderRadius: '8px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px'
-              }}>
-                <span role="img" aria-label="reminder">⏰</span>
+              <div
+                style={{
+                  marginTop: '20px',
+                  fontSize: '16px',
+                  color: '#666',
+                  padding: '12px',
+                  background: '#f8f9fa',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                }}
+              >
+                <span role="img" aria-label="reminder">
+                  ⏰
+                </span>
                 다음 복용 시간까지 {totalCount - takenCount}개 남았습니다
               </div>
             </MedicationSummaryCard>
 
             {/* 약물 목록 */}
             <MedicationGrid>
-              {medications.map(medication => {
+              {medications.map((medication) => {
                 const timeStatus = getTimeStatus(medication.time);
                 return (
                   <MedicationCard key={medication.id} taken={medication.taken}>
                     <MedicationContent>
                       <MedicationName>{medication.name}</MedicationName>
-                      <MedicationTimeDosage>⏰ {medication.time} • {medication.dosage}</MedicationTimeDosage>
+                      <MedicationTimeDosage>
+                        ⏰ {medication.time} • {medication.dosage}
+                      </MedicationTimeDosage>
                       <MedicationNote>{medication.note}</MedicationNote>
                     </MedicationContent>
                     <div style={{ marginTop: 'auto' }}>
                       <BadgeContainer>
-                        <StatusBadge status={medication.taken ? 'taken' : 'not-taken'}>
+                        <StatusBadge
+                          status={medication.taken ? 'taken' : 'not-taken'}
+                        >
                           {medication.taken ? '복용완료' : '미복용'}
                         </StatusBadge>
                         {timeStatus === 'overdue' && !medication.taken && (
@@ -358,29 +369,40 @@ const MedicationPage: React.FC = () => {
           <MedicationSectionTitle>복용 기록</MedicationSectionTitle>
           <HistoryCard style={{ marginTop: '20px' }}>
             <MediumText>이번 주 복용 현황</MediumText>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '12px', marginBottom: '20px' }}>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(7, 1fr)',
+                gap: '12px',
+                marginBottom: '20px',
+              }}
+            >
               {['월', '화', '수', '목', '금', '토', '일'].map((day, index) => (
                 <div key={day} style={{ textAlign: 'center' }}>
-                  <div style={{ 
-                    width: '40px', 
-                    height: '40px', 
-                    borderRadius: '50%', 
-                    background: index <= 3 ? '#e3f2fd' : '#bbdefb',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 8px',
-                    fontSize: '16px',
-                    fontWeight: 'bold',
-                    color: '#1976d2'
-                  }}>
+                  <div
+                    style={{
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '50%',
+                      background: index <= 3 ? '#e3f2fd' : '#bbdefb',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      margin: '0 auto 8px',
+                      fontSize: '16px',
+                      fontWeight: 'bold',
+                      color: '#1976d2',
+                    }}
+                  >
                     {day}
                   </div>
-                  <div style={{
-                    fontSize: '14px',
-                    color: index <= 3 ? '#4caf50' : '#2196f3',
-                    fontWeight: 'bold'
-                  }}>
+                  <div
+                    style={{
+                      fontSize: '14px',
+                      color: index <= 3 ? '#4caf50' : '#2196f3',
+                      fontWeight: 'bold',
+                    }}
+                  >
                     {index <= 3 ? '100%' : '66%'}
                   </div>
                 </div>
@@ -388,11 +410,13 @@ const MedicationPage: React.FC = () => {
             </div>
             {['혈압약', '당뇨약', '비타민'].map((med, index) => (
               <HistoryItem key={med}>
-                <HistoryDay style={{ width: 'auto', marginRight: '15px' }}>{med}</HistoryDay>
+                <HistoryDay style={{ width: 'auto', marginRight: '15px' }}>
+                  {med}
+                </HistoryDay>
                 <HistoryMedList>
                   {[...Array(7)].map((_, i) => (
-                    <HistoryStatusBadge 
-                      key={i} 
+                    <HistoryStatusBadge
+                      key={i}
                       status={index === 2 && i < 3 ? 'not-taken' : 'taken'}
                       style={{ minWidth: '30px', textAlign: 'center' }}
                     >
@@ -406,48 +430,100 @@ const MedicationPage: React.FC = () => {
 
           <StatisticsCard>
             <MediumText>월간 복용 통계</MediumText>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-              <div style={{ 
-                background: '#f5f5f5', 
-                padding: '20px', 
-                borderRadius: '12px',
-                textAlign: 'center'
-              }}>
-                <div style={{ fontSize: '36px', fontWeight: 'bold', color: '#2196f3', marginBottom: '8px' }}>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: '20px',
+              }}
+            >
+              <div
+                style={{
+                  background: '#f5f5f5',
+                  padding: '20px',
+                  borderRadius: '12px',
+                  textAlign: 'center',
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: '36px',
+                    fontWeight: 'bold',
+                    color: '#2196f3',
+                    marginBottom: '8px',
+                  }}
+                >
                   89%
                 </div>
                 <div style={{ color: '#666' }}>이번 달 평균 복용률</div>
               </div>
-              <div style={{ 
-                background: '#f5f5f5', 
-                padding: '20px', 
-                borderRadius: '12px',
-                textAlign: 'center'
-              }}>
-                <div style={{ fontSize: '36px', fontWeight: 'bold', color: '#4caf50', marginBottom: '8px' }}>
+              <div
+                style={{
+                  background: '#f5f5f5',
+                  padding: '20px',
+                  borderRadius: '12px',
+                  textAlign: 'center',
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: '36px',
+                    fontWeight: 'bold',
+                    color: '#4caf50',
+                    marginBottom: '8px',
+                  }}
+                >
                   15일
                 </div>
                 <div style={{ color: '#666' }}>연속 복용 달성</div>
               </div>
-              <StatisticItem style={{ gridColumn: '1 / -1', background: '#fff', padding: '15px', borderRadius: '8px' }}>
+              <StatisticItem
+                style={{
+                  gridColumn: '1 / -1',
+                  background: '#fff',
+                  padding: '15px',
+                  borderRadius: '8px',
+                }}
+              >
                 <div>
-                  <StatisticLabel style={{ marginBottom: '5px', color: '#333', fontWeight: 'bold' }}>복용 성공률 추이</StatisticLabel>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <StatisticLabel
+                    style={{
+                      marginBottom: '5px',
+                      color: '#333',
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    복용 성공률 추이
+                  </StatisticLabel>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                    }}
+                  >
                     {[85, 92, 88, 95, 89].map((value, i) => (
-                      <div key={i} style={{ 
-                        height: `${value}px`, 
-                        width: '30px', 
-                        background: value >= 90 ? '#4caf50' : '#2196f3',
-                        borderRadius: '4px',
-                        position: 'relative'
-                      }}>
-                        <div style={{ 
-                          position: 'absolute', 
-                          top: '-20px', 
-                          width: '100%', 
-                          textAlign: 'center',
-                          fontSize: '12px'
-                        }}>{value}%</div>
+                      <div
+                        key={i}
+                        style={{
+                          height: `${value}px`,
+                          width: '30px',
+                          background: value >= 90 ? '#4caf50' : '#2196f3',
+                          borderRadius: '4px',
+                          position: 'relative',
+                        }}
+                      >
+                        <div
+                          style={{
+                            position: 'absolute',
+                            top: '-20px',
+                            width: '100%',
+                            textAlign: 'center',
+                            fontSize: '12px',
+                          }}
+                        >
+                          {value}%
+                        </div>
                       </div>
                     ))}
                   </div>
