@@ -15,10 +15,15 @@ const CardTitle = styled.h3`
 
 // Styled Components for Exercise Page
 const ExerciseWrapper = styled.div`
-  padding: 30px;
+  padding: 40px;
   background-color: #f0f2f5;
   min-height: 100vh;
   font-family: 'Roboto', sans-serif;
+  max-width: 1800px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  zoom: 0.9;
+  transform-origin: top center;
 `;
 
 const ExerciseHeader = styled.div`
@@ -53,22 +58,27 @@ const SectionTitle = styled.h3`
 
 const SummaryGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
-  margin-bottom: 30px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  margin: 40px 0;
+  
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
 `;
 
 const ExerciseCard = styled.div`
   background: white;
-  border-radius: 12px;
-  padding: 25px;
+  border-radius: 16px;
+  padding: 35px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 180px;
+  min-height: 220px;
   transition: transform 0.2s ease-in-out;
 
   &:hover {
@@ -77,21 +87,21 @@ const ExerciseCard = styled.div`
 `;
 
 const CardIcon = styled.span`
-  font-size: 40px;
-  margin-bottom: 15px;
+  font-size: 48px;
+  margin-bottom: 20px;
 `;
 
 const CardValue = styled.p<{ color?: string }>`
-  font-size: 32px;
+  font-size: 42px;
   font-weight: bold;
   color: ${props => props.color || '#343a40'};
   margin: 0;
 `;
 
 const CardUnit = styled.p`
-  font-size: 16px;
+  font-size: 18px;
   color: #6c757d;
-  margin-top: 5px;
+  margin-top: 8px;
 `;
 
 const ProgressWrapper = styled.div`
@@ -344,15 +354,20 @@ const ExercisePage: React.FC = () => {
             </ExerciseCard>
           </SummaryGrid>
 
-          <ActionButton>
-            운동 시작하기
-          </ActionButton>
-
-          <TipCard>
-            <SectionTitle>💡 오늘의 운동 팁</SectionTitle>
-            <TipItem>• 아침에 10분씩 스트레칭을 해보세요</TipItem>
-            <TipItem>• 계단을 이용해 다리 근육을 강화하세요</TipItem>
-            <TipItem>• 물을 충분히 마시며 운동하세요</TipItem>
+          <TipCard style={{ marginTop: '32px', padding: '40px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '60px' }}>
+              <div style={{ flex: '1.2' }}>
+                <SectionTitle style={{ marginTop: 0, fontSize: '24px', marginBottom: '24px' }}>💡 오늘의 운동 팁</SectionTitle>
+                <TipItem style={{ fontSize: '18px', marginBottom: '16px' }}>• 아침에 10분씩 스트레칭을 해보세요</TipItem>
+                <TipItem style={{ fontSize: '18px', marginBottom: '16px' }}>• 계단을 이용해 다리 근육을 강화하세요</TipItem>
+                <TipItem style={{ fontSize: '18px' }}>• 물을 충분히 마시며 운동하세요</TipItem>
+              </div>
+              <div style={{ flex: '0.8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <ActionButton style={{ maxWidth: '320px', padding: '20px', fontSize: '20px' }}>
+                  운동 시작하기
+                </ActionButton>
+              </div>
+            </div>
           </TipCard>
         </>
       ) : (

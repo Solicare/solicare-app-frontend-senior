@@ -15,9 +15,20 @@ export const MediumText = styled.h2`
 // Grid Layout
 export const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  margin: 20px 0;
+  grid-template-columns: repeat(3, minmax(500px, 1fr));
+  gap: 32px;
+  margin-bottom: 40px;
+  width: 100%;
+  max-width: 1800px;
+  margin-left: auto;
+  margin-right: auto;
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 // Status Badge

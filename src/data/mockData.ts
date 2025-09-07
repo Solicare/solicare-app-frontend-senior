@@ -23,6 +23,14 @@ export const mockMedications = [
     taken: false,
     dosage: '1정',
     note: '식후 복용'
+  },
+  {
+    id: 4,
+    name: '수면보조제',
+    time: '21:00',
+    taken: false,
+    dosage: '1정',
+    note: '취침 30분 전 복용'
   }
 ];
 
