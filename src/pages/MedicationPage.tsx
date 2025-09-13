@@ -128,11 +128,11 @@ const MedicationGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
-  
+
   @media (max-width: 1400px) {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   @media (max-width: 800px) {
     grid-template-columns: 1fr;
   }
@@ -294,31 +294,31 @@ const MedicationPage: React.FC = () => {
   const getNextMedicationTime = () => {
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes();
-    
+
     // 미복용 약물들의 시간을 분으로 변환
     const upcomingMeds = medications
-      .filter(med => !med.taken)
-      .map(med => {
+      .filter((med) => !med.taken)
+      .map((med) => {
         const [hours, minutes] = med.time.split(':').map(Number);
         const medTime = hours * 60 + minutes;
         return {
           ...med,
-          timeInMinutes: medTime
+          timeInMinutes: medTime,
         };
       })
       .sort((a, b) => a.timeInMinutes - b.timeInMinutes);
 
     if (upcomingMeds.length === 0) {
-      return "모든 약물을 복용했습니다!";
+      return '모든 약물을 복용했습니다!';
     }
 
     // 오늘 남은 약물 중 가장 가까운 시간 찾기
-    let nextMed = upcomingMeds.find(med => med.timeInMinutes > currentTime);
-    
+    let nextMed = upcomingMeds.find((med) => med.timeInMinutes > currentTime);
+
     if (!nextMed) {
       // 오늘 남은 약물이 없으면 내일 첫 번째 약물
       nextMed = upcomingMeds[0];
-      const minutesUntilNext = (24 * 60) - currentTime + nextMed.timeInMinutes;
+      const minutesUntilNext = 24 * 60 - currentTime + nextMed.timeInMinutes;
       const hoursUntil = Math.floor(minutesUntilNext / 60);
       const minutesUntil = minutesUntilNext % 60;
       return `다음 복용까지 ${hoursUntil}시간 ${minutesUntil}분 남았습니다`;
@@ -400,23 +400,37 @@ const MedicationPage: React.FC = () => {
               </SummarySection>
 
               <WeeklyScheduleSection>
-                <div style={{ 
-                  fontSize: '20px', 
-                  fontWeight: 'bold', 
-                  color: '#343a40', 
-                  marginBottom: '20px'
-                }}>
+                <div
+                  style={{
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                    color: '#343a40',
+                    marginBottom: '20px',
+                  }}
+                >
                   📅 주간 복용 스케줄
                 </div>
-                
-                <div style={{ 
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  gap: '12px'
-                }}>
-                  {['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'].map((day, index) => {
-                    const isToday = index === new Date().getDay() - 1 || (new Date().getDay() === 0 && index === 6);
-                    
+
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '12px',
+                  }}
+                >
+                  {[
+                    '월요일',
+                    '화요일',
+                    '수요일',
+                    '목요일',
+                    '금요일',
+                    '토요일',
+                    '일요일',
+                  ].map((day, index) => {
+                    const isToday =
+                      index === new Date().getDay() - 1 ||
+                      (new Date().getDay() === 0 && index === 6);
+
                     // 요일별 약물 스케줄 정의
                     const weeklyMedications: { [key: number]: string[] } = {
                       0: ['혈압약', '당뇨약', '비타민'], // 월요일
@@ -425,13 +439,15 @@ const MedicationPage: React.FC = () => {
                       3: ['혈압약', '당뇨약', '비타민', '소화제'], // 목요일
                       4: ['혈압약', '당뇨약', '비타민'], // 금요일
                       5: ['혈압약', '관절약', '수면보조제'], // 토요일 (주말 스케줄)
-                      6: ['혈압약', '비타민', '수면보조제'] // 일요일 (주말 스케줄)
+                      6: ['혈압약', '비타민', '수면보조제'], // 일요일 (주말 스케줄)
                     };
-                    
-                    const dayMedications: string[] = weeklyMedications[index] || ['혈압약', '당뇨약'];
-                    
+
+                    const dayMedications: string[] = weeklyMedications[
+                      index
+                    ] || ['혈압약', '당뇨약'];
+
                     return (
-                      <div 
+                      <div
                         key={day}
                         style={{
                           display: 'flex',
@@ -440,46 +456,75 @@ const MedicationPage: React.FC = () => {
                           padding: '12px 16px',
                           background: isToday ? '#e3f2fd' : '#f8f9fa',
                           borderRadius: '8px',
-                          border: isToday ? '2px solid #2196f3' : '1px solid #e9ecef'
+                          border: isToday
+                            ? '2px solid #2196f3'
+                            : '1px solid #e9ecef',
                         }}
                       >
-                        <div style={{ 
-                          fontSize: '16px', 
-                          fontWeight: isToday ? 'bold' : 'normal',
-                          color: isToday ? '#1976d2' : '#666',
-                          minWidth: '60px'
-                        }}>
+                        <div
+                          style={{
+                            fontSize: '16px',
+                            fontWeight: isToday ? 'bold' : 'normal',
+                            color: isToday ? '#1976d2' : '#666',
+                            minWidth: '60px',
+                          }}
+                        >
                           {day}
-                          {isToday && <span style={{ fontSize: '12px', marginLeft: '4px' }}>(오늘)</span>}
+                          {isToday && (
+                            <span
+                              style={{ fontSize: '12px', marginLeft: '4px' }}
+                            >
+                              (오늘)
+                            </span>
+                          )}
                         </div>
-                        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                          {dayMedications.map((medName: string, medIndex: number) => {
-                            // 오늘인 경우 실제 복용 상태 확인
-                            let medStatus = 'default';
-                            if (isToday) {
-                              const actualMed = medications.find(m => m.name === medName);
-                              if (actualMed) {
-                                medStatus = actualMed.taken ? 'taken' : 'not-taken';
+                        <div
+                          style={{
+                            display: 'flex',
+                            gap: '6px',
+                            flexWrap: 'wrap',
+                          }}
+                        >
+                          {dayMedications.map(
+                            (medName: string, medIndex: number) => {
+                              // 오늘인 경우 실제 복용 상태 확인
+                              let medStatus = 'default';
+                              if (isToday) {
+                                const actualMed = medications.find(
+                                  (m) => m.name === medName
+                                );
+                                if (actualMed) {
+                                  medStatus = actualMed.taken
+                                    ? 'taken'
+                                    : 'not-taken';
+                                }
                               }
+
+                              return (
+                                <div
+                                  key={medIndex}
+                                  style={{
+                                    fontSize: '12px',
+                                    padding: '4px 8px',
+                                    background:
+                                      isToday && medStatus === 'taken'
+                                        ? '#4caf50'
+                                        : isToday && medStatus === 'not-taken'
+                                          ? '#ff9800'
+                                          : '#e0e0e0',
+                                    color:
+                                      isToday && medStatus !== 'default'
+                                        ? 'white'
+                                        : '#666',
+                                    borderRadius: '12px',
+                                    fontWeight: '500',
+                                  }}
+                                >
+                                  {medName}
+                                </div>
+                              );
                             }
-                            
-                            return (
-                              <div
-                                key={medIndex}
-                                style={{
-                                  fontSize: '12px',
-                                  padding: '4px 8px',
-                                  background: isToday && medStatus === 'taken' ? '#4caf50' : 
-                                            isToday && medStatus === 'not-taken' ? '#ff9800' : '#e0e0e0',
-                                  color: isToday && medStatus !== 'default' ? 'white' : '#666',
-                                  borderRadius: '12px',
-                                  fontWeight: '500'
-                                }}
-                              >
-                                {medName}
-                              </div>
-                            );
-                          })}
+                          )}
                         </div>
                       </div>
                     );

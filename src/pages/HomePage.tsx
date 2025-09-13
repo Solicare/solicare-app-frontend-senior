@@ -25,11 +25,11 @@ const TopBar = styled.div`
   align-items: center;
   padding: 32px 48px 0 48px;
   background: transparent;
-  
+
   @media (max-width: 1024px) {
     padding: 24px 32px 0 32px;
   }
-  
+
   @media (max-width: 768px) {
     flex-direction: column;
     gap: 20px;
@@ -49,7 +49,7 @@ const TopBtnGroup = styled.div`
   gap: 16px;
   align-items: center;
   flex-wrap: wrap;
-  
+
   @media (max-width: 768px) {
     justify-content: center;
     gap: 12px;
@@ -96,7 +96,7 @@ const UserWelcome = styled.span`
   font-weight: 600;
   margin-right: 16px;
   white-space: nowrap;
-  
+
   @media (max-width: 768px) {
     margin-right: 0;
     margin-bottom: 8px;
@@ -157,12 +157,12 @@ const DashboardBtn = styled.button`
   box-shadow: 0 6px 20px rgba(37, 99, 235, 0.25);
   transition: all 0.3s;
   margin-top: 12px;
-  
+
   &:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35);
   }
-  
+
   &:active {
     transform: translateY(-1px);
   }

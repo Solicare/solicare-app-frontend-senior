@@ -55,7 +55,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       try {
         // Basic JWT structure validation (header.payload.signature)
         const tokenParts = accessToken.split('.');
-        if (tokenParts.length === 3 || accessToken.startsWith('mock-jwt-token-')) {
+        if (
+          tokenParts.length === 3 ||
+          accessToken.startsWith('mock-jwt-token-')
+        ) {
           setIsAuthenticated(true);
           setUser({ name: '테스트 사용자', id: '1' });
         }
@@ -75,14 +78,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       sub: userId,
       username: username,
       iat: Math.floor(Date.now() / 1000),
-      exp: Math.floor(Date.now() / 1000) + (7 * 24 * 60 * 60) // 7 days
+      exp: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60, // 7 days
     };
-    
+
     // Base64 encode (for demo purposes only - real JWT needs proper signing)
     const encodedHeader = btoa(JSON.stringify(header));
     const encodedPayload = btoa(JSON.stringify(payload));
     const signature = btoa('mock-signature-' + Date.now());
-    
+
     return `${encodedHeader}.${encodedPayload}.${signature}`;
   };
 
@@ -90,23 +93,23 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     try {
       // Mock login - in real app, this would be an API call
       console.log('Attempting to log in with:', { username, password });
-      
+
       // Generate mock JWT token
       const accessToken = generateMockJWT('1', username);
-      
+
       // Store token in cookie
-      Cookies.set('accessToken', accessToken, { 
+      Cookies.set('accessToken', accessToken, {
         expires: 7, // 7 days
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict'
+        sameSite: 'strict',
       });
-      
+
       // Remove old authToken if exists
       Cookies.remove('authToken');
-      
+
       setIsAuthenticated(true);
       setUser({ name: '테스트 사용자', id: '1' });
-      
+
       return { success: true };
     } catch (error) {
       return { success: false, error: '로그인에 실패했습니다.' };
@@ -122,23 +125,23 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     try {
       // Mock signup - in real app, this would be an API call
       console.log('Attempting to sign up with:', userData);
-      
+
       // Generate mock JWT token
       const accessToken = generateMockJWT('2', userData.username);
-      
+
       // Store token in cookie
-      Cookies.set('accessToken', accessToken, { 
+      Cookies.set('accessToken', accessToken, {
         expires: 7, // 7 days
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict'
+        sameSite: 'strict',
       });
-      
+
       // Remove old authToken if exists
       Cookies.remove('authToken');
-      
+
       setIsAuthenticated(true);
       setUser({ name: userData.name, id: '2' });
-      
+
       return { success: true };
     } catch (error) {
       return { success: false, error: '회원가입에 실패했습니다.' };

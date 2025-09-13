@@ -34,16 +34,22 @@ const mockMeals: MealItem[] = [
     completed: true,
     nutrients: { protein: 15, carbs: 65, fat: 8 },
     recipe: {
-      ingredients: ['현미밥 1공기', '된장 2큰술', '시금치 100g', '마늘 2쪽', '참기름 1작은술'],
+      ingredients: [
+        '현미밥 1공기',
+        '된장 2큰술',
+        '시금치 100g',
+        '마늘 2쪽',
+        '참기름 1작은술',
+      ],
       instructions: [
         '현미밥을 지어 따뜻하게 준비합니다',
         '된장찌개: 된장을 물에 풀고 끓입니다',
         '시금치를 깨끗이 씻어 데칩니다',
-        '데친 시금치에 마늘, 참기름을 넣어 무칩니다'
+        '데친 시금치에 마늘, 참기름을 넣어 무칩니다',
       ],
       cookingTime: '25분',
-      difficulty: '쉬움'
-    }
+      difficulty: '쉬움',
+    },
   },
   {
     id: 2,
@@ -54,16 +60,22 @@ const mockMeals: MealItem[] = [
     completed: false,
     nutrients: { protein: 35, carbs: 45, fat: 5 },
     recipe: {
-      ingredients: ['닭가슴살 150g', '양상추 50g', '토마토 1개', '고구마 1개', '올리브오일 1큰술'],
+      ingredients: [
+        '닭가슴살 150g',
+        '양상추 50g',
+        '토마토 1개',
+        '고구마 1개',
+        '올리브오일 1큰술',
+      ],
       instructions: [
         '닭가슴살을 소금, 후추로 간하여 구워줍니다',
         '고구마를 쪄서 준비합니다',
         '양상추와 토마토를 깨끗이 씻어 썹니다',
-        '모든 재료를 섞어 올리브오일로 드레싱합니다'
+        '모든 재료를 섞어 올리브오일로 드레싱합니다',
       ],
       cookingTime: '20분',
-      difficulty: '쉬움'
-    }
+      difficulty: '쉬움',
+    },
   },
   {
     id: 3,
@@ -74,16 +86,22 @@ const mockMeals: MealItem[] = [
     completed: false,
     nutrients: { protein: 28, carbs: 40, fat: 15 },
     recipe: {
-      ingredients: ['연어 120g', '브로콜리 100g', '현미밥 1공기', '레몬 1/2개', '올리브오일 1큰술'],
+      ingredients: [
+        '연어 120g',
+        '브로콜리 100g',
+        '현미밥 1공기',
+        '레몬 1/2개',
+        '올리브오일 1큰술',
+      ],
       instructions: [
         '연어에 소금, 후추로 간을 합니다',
         '팬에 올리브오일을 두르고 연어를 구워줍니다',
         '브로콜리를 데쳐서 준비합니다',
-        '현미밥과 함께 레몬을 곁들여 내놓습니다'
+        '현미밥과 함께 레몬을 곁들여 내놓습니다',
       ],
       cookingTime: '15분',
-      difficulty: '보통'
-    }
+      difficulty: '보통',
+    },
   },
   {
     id: 4,
@@ -99,12 +117,12 @@ const mockMeals: MealItem[] = [
         '견과류를 적당히 섞어 준비합니다',
         '사과를 깨끗이 씻어 먹기 좋게 썹니다',
         '원하면 꿀을 살짝 뿌려 드세요',
-        '간식으로 천천히 드시면 됩니다'
+        '간식으로 천천히 드시면 됩니다',
       ],
       cookingTime: '5분',
-      difficulty: '매우 쉬움'
-    }
-  }
+      difficulty: '매우 쉬움',
+    },
+  },
 ];
 
 // Styled Components
@@ -253,11 +271,11 @@ const MealGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
-  
+
   @media (max-width: 1400px) {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   @media (max-width: 800px) {
     grid-template-columns: 1fr;
   }
@@ -291,11 +309,14 @@ const MealType = styled.span<{ type: string }>`
   font-size: 14px;
   font-weight: bold;
   color: white;
-  background: ${(props) => 
-    props.type === 'breakfast' ? '#ff9800' :
-    props.type === 'lunch' ? '#2196f3' :
-    props.type === 'dinner' ? '#9c27b0' : '#4caf50'
-  };
+  background: ${(props) =>
+    props.type === 'breakfast'
+      ? '#ff9800'
+      : props.type === 'lunch'
+        ? '#2196f3'
+        : props.type === 'dinner'
+          ? '#9c27b0'
+          : '#4caf50'};
 `;
 
 const MealTime = styled.span`
@@ -381,18 +402,18 @@ const MealButton = styled.button<{ completed: boolean }>`
 const RecipeButton = styled.button`
   width: 100%;
   padding: 8px 16px;
-  border: 2px solid #87CEEB;
+  border: 2px solid #87ceeb;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
-  color: #1E90FF;
+  color: #1e90ff;
   background-color: white;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   margin-top: 8px;
 
   &:hover {
-    background-color: #87CEEB;
+    background-color: #87ceeb;
     color: white;
     transform: translateY(-1px);
   }
@@ -492,7 +513,7 @@ const CloseButton = styled.button`
   font-size: 24px;
   cursor: pointer;
   color: #666;
-  
+
   &:hover {
     color: #333;
   }
@@ -522,24 +543,34 @@ const DietPage: React.FC = () => {
     setSelectedRecipe(null);
   };
 
-  const completedMeals = meals.filter(meal => meal.completed).length;
+  const completedMeals = meals.filter((meal) => meal.completed).length;
   const totalCalories = meals.reduce((sum, meal) => sum + meal.calories, 0);
-  const consumedCalories = meals.filter(meal => meal.completed).reduce((sum, meal) => sum + meal.calories, 0);
+  const consumedCalories = meals
+    .filter((meal) => meal.completed)
+    .reduce((sum, meal) => sum + meal.calories, 0);
   const targetCalories = 1800; // 목표 칼로리
 
-  const totalNutrients = meals.reduce((acc, meal) => ({
-    protein: acc.protein + meal.nutrients.protein,
-    carbs: acc.carbs + meal.nutrients.carbs,
-    fat: acc.fat + meal.nutrients.fat
-  }), { protein: 0, carbs: 0, fat: 0 });
+  const totalNutrients = meals.reduce(
+    (acc, meal) => ({
+      protein: acc.protein + meal.nutrients.protein,
+      carbs: acc.carbs + meal.nutrients.carbs,
+      fat: acc.fat + meal.nutrients.fat,
+    }),
+    { protein: 0, carbs: 0, fat: 0 }
+  );
 
   const getMealTypeLabel = (type: string) => {
     switch (type) {
-      case 'breakfast': return '아침';
-      case 'lunch': return '점심';
-      case 'dinner': return '저녁';
-      case 'snack': return '간식';
-      default: return type;
+      case 'breakfast':
+        return '아침';
+      case 'lunch':
+        return '점심';
+      case 'dinner':
+        return '저녁';
+      case 'snack':
+        return '간식';
+      default:
+        return type;
     }
   };
 
@@ -587,24 +618,28 @@ const DietPage: React.FC = () => {
           </CalorieSection>
 
           <NutrientSection>
-            <div style={{ 
-              fontSize: '20px', 
-              fontWeight: 'bold', 
-              color: '#343a40', 
-              marginBottom: '20px'
-            }}>
+            <div
+              style={{
+                fontSize: '20px',
+                fontWeight: 'bold',
+                color: '#343a40',
+                marginBottom: '20px',
+              }}
+            >
               📊 영양소 분석
             </div>
-            
+
             <NutrientChart>
               <NutrientItem>
                 <NutrientInfo>
                   <NutrientName>단백질</NutrientName>
-                  <NutrientAmount>{totalNutrients.protein}g / 120g</NutrientAmount>
+                  <NutrientAmount>
+                    {totalNutrients.protein}g / 120g
+                  </NutrientAmount>
                 </NutrientInfo>
                 <NutrientBar>
-                  <NutrientBarFill 
-                    width={Math.min((totalNutrients.protein / 120) * 100, 100)} 
+                  <NutrientBarFill
+                    width={Math.min((totalNutrients.protein / 120) * 100, 100)}
                     color="#ff5722"
                   />
                 </NutrientBar>
@@ -613,11 +648,13 @@ const DietPage: React.FC = () => {
               <NutrientItem>
                 <NutrientInfo>
                   <NutrientName>탄수화물</NutrientName>
-                  <NutrientAmount>{totalNutrients.carbs}g / 250g</NutrientAmount>
+                  <NutrientAmount>
+                    {totalNutrients.carbs}g / 250g
+                  </NutrientAmount>
                 </NutrientInfo>
                 <NutrientBar>
-                  <NutrientBarFill 
-                    width={Math.min((totalNutrients.carbs / 250) * 100, 100)} 
+                  <NutrientBarFill
+                    width={Math.min((totalNutrients.carbs / 250) * 100, 100)}
                     color="#2196f3"
                   />
                 </NutrientBar>
@@ -629,8 +666,8 @@ const DietPage: React.FC = () => {
                   <NutrientAmount>{totalNutrients.fat}g / 60g</NutrientAmount>
                 </NutrientInfo>
                 <NutrientBar>
-                  <NutrientBarFill 
-                    width={Math.min((totalNutrients.fat / 60) * 100, 100)} 
+                  <NutrientBarFill
+                    width={Math.min((totalNutrients.fat / 60) * 100, 100)}
                     color="#ff9800"
                   />
                 </NutrientBar>
@@ -673,9 +710,7 @@ const DietPage: React.FC = () => {
               </NutrientSummary>
 
               <div style={{ marginBottom: '16px' }}>
-                <StatusBadge
-                  status={meal.completed ? 'taken' : 'not-taken'}
-                >
+                <StatusBadge status={meal.completed ? 'taken' : 'not-taken'}>
                   {meal.completed ? '섭취완료' : '미섭취'}
                 </StatusBadge>
               </div>
@@ -702,12 +737,16 @@ const DietPage: React.FC = () => {
         <ModalOverlay onClick={closeRecipeModal}>
           <RecipeModal onClick={(e) => e.stopPropagation()}>
             <CloseButton onClick={closeRecipeModal}>×</CloseButton>
-            
+
             <RecipeTitle>🍽️ {selectedRecipe.name}</RecipeTitle>
-            
+
             <RecipeInfo>
-              <RecipeInfoItem>⏱️ {selectedRecipe.recipe?.cookingTime}</RecipeInfoItem>
-              <RecipeInfoItem>📊 {selectedRecipe.recipe?.difficulty}</RecipeInfoItem>
+              <RecipeInfoItem>
+                ⏱️ {selectedRecipe.recipe?.cookingTime}
+              </RecipeInfoItem>
+              <RecipeInfoItem>
+                📊 {selectedRecipe.recipe?.difficulty}
+              </RecipeInfoItem>
               <RecipeInfoItem>🔥 {selectedRecipe.calories}kcal</RecipeInfoItem>
             </RecipeInfo>
 
@@ -723,20 +762,28 @@ const DietPage: React.FC = () => {
             <RecipeSection>
               <RecipeSectionTitle>👩‍🍳 조리법</RecipeSectionTitle>
               <RecipeList>
-                {selectedRecipe.recipe?.instructions.map((instruction, index) => (
-                  <RecipeListItem key={index}>
-                    <strong>{index + 1}.</strong> {instruction}
-                  </RecipeListItem>
-                ))}
+                {selectedRecipe.recipe?.instructions.map(
+                  (instruction, index) => (
+                    <RecipeListItem key={index}>
+                      <strong>{index + 1}.</strong> {instruction}
+                    </RecipeListItem>
+                  )
+                )}
               </RecipeList>
             </RecipeSection>
 
             <RecipeSection>
               <RecipeSectionTitle>📊 영양성분</RecipeSectionTitle>
               <RecipeInfo>
-                <RecipeInfoItem>단백질 {selectedRecipe.nutrients.protein}g</RecipeInfoItem>
-                <RecipeInfoItem>탄수화물 {selectedRecipe.nutrients.carbs}g</RecipeInfoItem>
-                <RecipeInfoItem>지방 {selectedRecipe.nutrients.fat}g</RecipeInfoItem>
+                <RecipeInfoItem>
+                  단백질 {selectedRecipe.nutrients.protein}g
+                </RecipeInfoItem>
+                <RecipeInfoItem>
+                  탄수화물 {selectedRecipe.nutrients.carbs}g
+                </RecipeInfoItem>
+                <RecipeInfoItem>
+                  지방 {selectedRecipe.nutrients.fat}g
+                </RecipeInfoItem>
               </RecipeInfo>
             </RecipeSection>
           </RecipeModal>

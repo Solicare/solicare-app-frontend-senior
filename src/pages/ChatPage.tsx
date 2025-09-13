@@ -21,16 +21,16 @@ const ChatWrapper = styled.div`
   flex-direction: column;
   max-width: 1200px;
   margin: 0 auto;
-  
+
   @media (max-width: 1400px) {
     max-width: 1000px;
   }
-  
+
   @media (max-width: 1200px) {
     max-width: 900px;
     padding: 20px;
   }
-  
+
   @media (max-width: 768px) {
     max-width: 100%;
     padding: 15px;
@@ -46,7 +46,7 @@ const ChatHeader = styled.div`
   padding: 20px 30px;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  
+
   @media (max-width: 768px) {
     padding: 15px 20px;
     margin-bottom: 20px;
@@ -71,7 +71,7 @@ const ChatContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 500px;
-  
+
   @media (max-width: 768px) {
     padding: 15px;
     min-height: 400px;
@@ -84,7 +84,7 @@ const MessageBubble = styled.div<{ type: 'user' | 'ai' }>`
   border-radius: 20px;
   margin-bottom: 15px;
   line-height: 1.4;
-  
+
   @media (max-width: 768px) {
     max-width: 85%;
     padding: 12px 16px;
@@ -131,7 +131,7 @@ const InputArea = styled.div`
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   padding: 15px 20px;
   margin-bottom: 20px;
-  
+
   @media (max-width: 768px) {
     padding: 12px 15px;
     gap: 8px;
@@ -150,7 +150,7 @@ const ChatInput = styled.input`
     border-color: #007bff;
     outline: none;
   }
-  
+
   @media (max-width: 768px) {
     padding: 10px 12px;
     font-size: 14px;

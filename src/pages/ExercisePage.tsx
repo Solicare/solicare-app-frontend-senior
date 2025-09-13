@@ -371,70 +371,159 @@ const ExercisePage: React.FC = () => {
               >
                 🏆 이웃과 활동량 비교
               </SectionTitle>
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '60px' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: '60px',
+                }}
+              >
                 <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '16px', color: '#666', marginBottom: '8px' }}>
+                  <div
+                    style={{
+                      fontSize: '16px',
+                      color: '#666',
+                      marginBottom: '8px',
+                    }}
+                  >
                     권장 걸음 수
                   </div>
-                  <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#9c27b0', marginBottom: '16px' }}>
+                  <div
+                    style={{
+                      fontSize: '32px',
+                      fontWeight: 'bold',
+                      color: '#9c27b0',
+                      marginBottom: '16px',
+                    }}
+                  >
                     6,000보
                   </div>
                 </div>
                 <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '16px', color: '#666', marginBottom: '8px' }}>
+                  <div
+                    style={{
+                      fontSize: '16px',
+                      color: '#666',
+                      marginBottom: '8px',
+                    }}
+                  >
                     동네 평균 걸음 수
                   </div>
-                  <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#007bff', marginBottom: '16px' }}>
+                  <div
+                    style={{
+                      fontSize: '32px',
+                      fontWeight: 'bold',
+                      color: '#007bff',
+                      marginBottom: '16px',
+                    }}
+                  >
                     4,200보
                   </div>
                 </div>
                 <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '16px', color: '#666', marginBottom: '8px' }}>
+                  <div
+                    style={{
+                      fontSize: '16px',
+                      color: '#666',
+                      marginBottom: '8px',
+                    }}
+                  >
                     내 걸음 수
                   </div>
-                  <div style={{ fontSize: '32px', fontWeight: 'bold', color: '#28a745', marginBottom: '16px' }}>
+                  <div
+                    style={{
+                      fontSize: '32px',
+                      fontWeight: 'bold',
+                      color: '#28a745',
+                      marginBottom: '16px',
+                    }}
+                  >
                     {today.steps.toLocaleString()}보
                   </div>
                 </div>
               </div>
-              <div style={{
-                marginTop: '24px',
-                padding: '16px',
-                backgroundColor: '#fff3cd',
-                borderRadius: '8px',
-                fontSize: '20px',
-                fontWeight: 600,
-                color: '#856404',
-              }}>
+              <div
+                style={{
+                  marginTop: '24px',
+                  padding: '16px',
+                  backgroundColor: '#fff3cd',
+                  borderRadius: '8px',
+                  fontSize: '20px',
+                  fontWeight: 600,
+                  color: '#856404',
+                }}
+              >
                 🎉 상위 35%입니다! 정말 잘하고 계세요! 👏
               </div>
             </div>
           </TipCard>
 
           <TipCard style={{ marginTop: '32px', padding: '40px' }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                justifyContent: 'center',
+              }}
+            >
               <div style={{ flex: '1', textAlign: 'center' }}>
                 <SectionTitle
                   style={{
                     marginTop: 0,
                     fontSize: '24px',
                     marginBottom: '24px',
-                    textAlign: 'center'
+                    textAlign: 'center',
                   }}
                 >
                   💡 오늘의 운동 팁
                 </SectionTitle>
-                <TipItem style={{ fontSize: '18px', marginBottom: '20px', lineHeight: '1.6', textAlign: 'center' }}>
-                  • <strong>아침 스트레칭:</strong> 아침에 10분씩 가벼운 스트레칭을 하면 관절이 부드러워지고 하루 종일 활력이 넘칩니다. 목, 어깨, 허리를 천천히 풀어주세요.
+                <TipItem
+                  style={{
+                    fontSize: '18px',
+                    marginBottom: '20px',
+                    lineHeight: '1.6',
+                    textAlign: 'center',
+                  }}
+                >
+                  • <strong>아침 스트레칭:</strong> 아침에 10분씩 가벼운
+                  스트레칭을 하면 관절이 부드러워지고 하루 종일 활력이 넘칩니다.
+                  목, 어깨, 허리를 천천히 풀어주세요.
                 </TipItem>
-                <TipItem style={{ fontSize: '18px', marginBottom: '20px', lineHeight: '1.6', textAlign: 'center' }}>
-                  • <strong>계단 운동:</strong> 엘리베이터 대신 계단을 이용하면 다리 근육 강화와 심폐기능 향상에 도움이 됩니다. 무릎에 무리가 가지 않도록 천천히 올라가세요.
+                <TipItem
+                  style={{
+                    fontSize: '18px',
+                    marginBottom: '20px',
+                    lineHeight: '1.6',
+                    textAlign: 'center',
+                  }}
+                >
+                  • <strong>계단 운동:</strong> 엘리베이터 대신 계단을 이용하면
+                  다리 근육 강화와 심폐기능 향상에 도움이 됩니다. 무릎에 무리가
+                  가지 않도록 천천히 올라가세요.
                 </TipItem>
-                <TipItem style={{ fontSize: '18px', marginBottom: '20px', lineHeight: '1.6', textAlign: 'center' }}>
-                  • <strong>수분 섭취:</strong> 운동 전후로 충분한 물을 마셔 탈수를 예방하고, 근육 경련을 방지하세요. 하루 8잔 이상의 물을 마시는 것이 좋습니다.
+                <TipItem
+                  style={{
+                    fontSize: '18px',
+                    marginBottom: '20px',
+                    lineHeight: '1.6',
+                    textAlign: 'center',
+                  }}
+                >
+                  • <strong>수분 섭취:</strong> 운동 전후로 충분한 물을 마셔
+                  탈수를 예방하고, 근육 경련을 방지하세요. 하루 8잔 이상의 물을
+                  마시는 것이 좋습니다.
                 </TipItem>
-                <TipItem style={{ fontSize: '18px', lineHeight: '1.6', textAlign: 'center' }}>
-                  • <strong>걷기 운동:</strong> 매일 30분씩 꾸준히 걷기만 해도 혈압 조절, 당뇨 예방, 체중 관리에 탁월한 효과가 있습니다. 공원이나 산책로를 이용해보세요.
+                <TipItem
+                  style={{
+                    fontSize: '18px',
+                    lineHeight: '1.6',
+                    textAlign: 'center',
+                  }}
+                >
+                  • <strong>걷기 운동:</strong> 매일 30분씩 꾸준히 걷기만 해도
+                  혈압 조절, 당뇨 예방, 체중 관리에 탁월한 효과가 있습니다.
+                  공원이나 산책로를 이용해보세요.
                 </TipItem>
               </div>
             </div>

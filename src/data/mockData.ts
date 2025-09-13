@@ -45,7 +45,7 @@ export const mockExerciseData = {
     mySteps: 3240,
     neighborAverage: 2850,
     percentile: 72, // 상위 28%
-    ranking: '상위 28%'
+    ranking: '상위 28%',
   },
   weekly: [
     { day: '월', steps: 2800, duration: '20분' },
@@ -117,34 +117,34 @@ export const mockNotifications = [
     title: '💊 약 복용 알림',
     message: '고혈압약 복용 시간입니다',
     time: '15:00',
-    type: 'medication'
+    type: 'medication',
   },
   {
     id: 2,
     title: '🚶‍♂️ 운동 추천',
     message: '오늘 걸음 수가 목표에 가까워요!',
     time: '16:30',
-    type: 'exercise'
+    type: 'exercise',
   },
   {
     id: 3,
     title: '🍽️ 식단 알림',
     message: '저녁 식사 시간이 다가왔어요',
     time: '18:00',
-    type: 'diet'
+    type: 'diet',
   },
   {
     id: 4,
     title: '💧 수분 섭취',
     message: '물 마실 시간이에요',
     time: '19:00',
-    type: 'water'
+    type: 'water',
   },
   {
     id: 5,
     title: '🌙 수면 준비',
     message: '숙면을 위해 준비하세요',
     time: '21:30',
-    type: 'sleep'
-  }
+    type: 'sleep',
+  },
 ];

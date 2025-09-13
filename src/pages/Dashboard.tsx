@@ -1,7 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { mockExerciseData, mockMedications, mockDietData, mockNotifications } from '../data/mockData';
+import {
+  mockExerciseData,
+  mockMedications,
+  mockDietData,
+  mockNotifications,
+} from '../data/mockData';
 import styled from 'styled-components';
 import {
   GridContainer,
@@ -188,21 +193,21 @@ const NotificationScrollContainer = styled.div`
   padding: 8px 0 12px 0;
   margin-top: 16px;
   width: 100%;
-  
+
   &::-webkit-scrollbar {
     height: 6px;
   }
-  
+
   &::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 3px;
   }
-  
+
   &::-webkit-scrollbar-thumb {
     background: #c1c1c1;
     border-radius: 3px;
   }
-  
+
   &::-webkit-scrollbar-thumb:hover {
     background: #a8a8a8;
   }
@@ -281,12 +286,14 @@ const Dashboard: React.FC = () => {
             {today}
           </div>
           <CardTitle>🔔 오늘의 알림</CardTitle>
-          
+
           <NotificationScrollContainer>
             {mockNotifications.map((notification) => (
               <NotificationItem key={notification.id}>
                 <NotificationTitle>{notification.title}</NotificationTitle>
-                <NotificationMessage>{notification.message}</NotificationMessage>
+                <NotificationMessage>
+                  {notification.message}
+                </NotificationMessage>
                 <NotificationTime>{notification.time}</NotificationTime>
               </NotificationItem>
             ))}
@@ -301,42 +308,50 @@ const Dashboard: React.FC = () => {
               {takenMedications} / {totalMedications}
             </CardValue>
             <CardDescription>복용 완료</CardDescription>
-            
+
             {/* 복용 기록 섹션 추가 */}
-            <div style={{ 
-              marginTop: '20px', 
-              padding: '16px', 
-              backgroundColor: '#f8f9fa', 
-              borderRadius: '8px' 
-            }}>
-              <div style={{ 
-                fontSize: '16px', 
-                fontWeight: '600', 
-                marginBottom: '8px',
-                color: '#2563eb'
-              }}>
+            <div
+              style={{
+                marginTop: '20px',
+                padding: '16px',
+                backgroundColor: '#f8f9fa',
+                borderRadius: '8px',
+              }}
+            >
+              <div
+                style={{
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  marginBottom: '8px',
+                  color: '#2563eb',
+                }}
+              >
                 📋 복용 기록
               </div>
-              <div style={{
-                margin: '8px 0',
-                fontSize: '14px',
-                color: '#007bff',
-                fontWeight: 600,
-              }}>
+              <div
+                style={{
+                  margin: '8px 0',
+                  fontSize: '14px',
+                  color: '#007bff',
+                  fontWeight: 600,
+                }}
+              >
                 최근 7일간 복용률:{' '}
                 <span style={{ color: '#28a745', fontWeight: 700 }}>86%</span>
               </div>
-              <div style={{
-                margin: '4px 0 12px 0',
-                fontSize: '12px',
-                color: '#ff9800',
-                fontWeight: 500,
-              }}>
+              <div
+                style={{
+                  margin: '4px 0 12px 0',
+                  fontSize: '12px',
+                  color: '#ff9800',
+                  fontWeight: 500,
+                }}
+              >
                 복용 성공! 건강을 지키고 있어요 👍
               </div>
             </div>
-            
-            <CardButton 
+
+            <CardButton
               onClick={() => navigate('/medication')}
               style={{ marginTop: '16px' }}
             >
@@ -348,47 +363,57 @@ const Dashboard: React.FC = () => {
           <DashboardCard>
             <CardTitle>🍽️ 식단 관리</CardTitle>
             <CardValue color="#ff5722">
-              {mockDietData.today.consumedCalories} / {mockDietData.today.targetCalories}
+              {mockDietData.today.consumedCalories} /{' '}
+              {mockDietData.today.targetCalories}
             </CardValue>
             <CardDescription>오늘 섭취 칼로리</CardDescription>
-            
+
             {/* 식단 현황 섹션 */}
-            <div style={{ 
-              marginTop: '20px', 
-              padding: '16px', 
-              backgroundColor: '#f8f9fa', 
-              borderRadius: '8px' 
-            }}>
-              <div style={{ 
-                fontSize: '16px', 
-                fontWeight: '600', 
-                marginBottom: '8px',
-                color: '#ff5722'
-              }}>
+            <div
+              style={{
+                marginTop: '20px',
+                padding: '16px',
+                backgroundColor: '#f8f9fa',
+                borderRadius: '8px',
+              }}
+            >
+              <div
+                style={{
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  marginBottom: '8px',
+                  color: '#ff5722',
+                }}
+              >
                 🥗 오늘의 식단
               </div>
-              <div style={{
-                margin: '8px 0',
-                fontSize: '14px',
-                color: '#ff5722',
-                fontWeight: 600,
-              }}>
+              <div
+                style={{
+                  margin: '8px 0',
+                  fontSize: '14px',
+                  color: '#ff5722',
+                  fontWeight: 600,
+                }}
+              >
                 완료된 끼니:{' '}
                 <span style={{ color: '#28a745', fontWeight: 700 }}>
-                  {mockDietData.today.mealsCompleted} / {mockDietData.today.totalMeals}
+                  {mockDietData.today.mealsCompleted} /{' '}
+                  {mockDietData.today.totalMeals}
                 </span>
               </div>
-              <div style={{
-                margin: '4px 0 12px 0',
-                fontSize: '12px',
-                color: '#ff9800',
-                fontWeight: 500,
-              }}>
+              <div
+                style={{
+                  margin: '4px 0 12px 0',
+                  fontSize: '12px',
+                  color: '#ff9800',
+                  fontWeight: 500,
+                }}
+              >
                 균형 잡힌 식단으로 건강을 챙겨요! 🌟
               </div>
             </div>
-            
-            <CardButton 
+
+            <CardButton
               onClick={() => navigate('/diet')}
               style={{ marginTop: '16px' }}
             >
@@ -406,44 +431,53 @@ const Dashboard: React.FC = () => {
               {mockExerciseData.today.distance} •{' '}
               {mockExerciseData.today.duration}
             </CardDescription>
-            
+
             {/* 이웃 비교 섹션 추가 */}
-            <div style={{ 
-              marginTop: '20px', 
-              padding: '16px', 
-              backgroundColor: '#f8f9fa', 
-              borderRadius: '8px' 
-            }}>
-              <div style={{ 
-                fontSize: '16px', 
-                fontWeight: '600', 
-                marginBottom: '8px',
-                color: '#28a745'
-              }}>
+            <div
+              style={{
+                marginTop: '20px',
+                padding: '16px',
+                backgroundColor: '#f8f9fa',
+                borderRadius: '8px',
+              }}
+            >
+              <div
+                style={{
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  marginBottom: '8px',
+                  color: '#28a745',
+                }}
+              >
                 👥 이웃과 비교
               </div>
-              <div style={{
-                margin: '8px 0',
-                fontSize: '14px',
-                color: '#28a745',
-                fontWeight: 600,
-              }}>
+              <div
+                style={{
+                  margin: '8px 0',
+                  fontSize: '14px',
+                  color: '#28a745',
+                  fontWeight: 600,
+                }}
+              >
                 이웃 평균:{' '}
                 <span style={{ color: '#6c757d', fontWeight: 500 }}>
-                  {mockExerciseData.neighborComparison.neighborAverage.toLocaleString()}보
+                  {mockExerciseData.neighborComparison.neighborAverage.toLocaleString()}
+                  보
                 </span>
               </div>
-              <div style={{
-                margin: '4px 0 12px 0',
-                fontSize: '12px',
-                color: '#ff9800',
-                fontWeight: 500,
-              }}>
+              <div
+                style={{
+                  margin: '4px 0 12px 0',
+                  fontSize: '12px',
+                  color: '#ff9800',
+                  fontWeight: 500,
+                }}
+              >
                 🏆 {mockExerciseData.neighborComparison.ranking}로 우수해요!
               </div>
             </div>
-            
-            <CardButton 
+
+            <CardButton
               onClick={() => navigate('/exercise')}
               style={{ marginTop: '16px' }}
             >
