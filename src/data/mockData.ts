@@ -41,6 +41,12 @@ export const mockExerciseData = {
     calories: 156,
     duration: '25분',
   },
+  neighborComparison: {
+    mySteps: 3240,
+    neighborAverage: 2850,
+    percentile: 72, // 상위 28%
+    ranking: '상위 28%'
+  },
   weekly: [
     { day: '월', steps: 2800, duration: '20분' },
     { day: '화', steps: 3200, duration: '25분' },
@@ -86,4 +92,59 @@ export const mockChatHistory: Message[] = [
       '오늘은 3,240보를 걸으셨고, 2.1km를 이동하셨습니다. 총 25분간 운동하셨네요. 정말 좋습니다!',
     timestamp: '2024-01-15 10:33',
   },
+];
+
+export const mockDietData = {
+  today: {
+    consumedCalories: 420,
+    targetCalories: 1800,
+    mealsCompleted: 1,
+    totalMeals: 4,
+  },
+  nutrients: {
+    protein: 15,
+    carbs: 65,
+    fat: 8,
+    targetProtein: 120,
+    targetCarbs: 250,
+    targetFat: 60,
+  },
+};
+
+export const mockNotifications = [
+  {
+    id: 1,
+    title: '💊 약 복용 알림',
+    message: '고혈압약 복용 시간입니다',
+    time: '15:00',
+    type: 'medication'
+  },
+  {
+    id: 2,
+    title: '🚶‍♂️ 운동 추천',
+    message: '오늘 걸음 수가 목표에 가까워요!',
+    time: '16:30',
+    type: 'exercise'
+  },
+  {
+    id: 3,
+    title: '🍽️ 식단 알림',
+    message: '저녁 식사 시간이 다가왔어요',
+    time: '18:00',
+    type: 'diet'
+  },
+  {
+    id: 4,
+    title: '💧 수분 섭취',
+    message: '물 마실 시간이에요',
+    time: '19:00',
+    type: 'water'
+  },
+  {
+    id: 5,
+    title: '🌙 수면 준비',
+    message: '숙면을 위해 준비하세요',
+    time: '21:30',
+    type: 'sleep'
+  }
 ];

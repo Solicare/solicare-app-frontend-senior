@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const MAX_WIDTH = 1000;
 
@@ -24,6 +25,16 @@ const TopBar = styled.div`
   align-items: center;
   padding: 32px 48px 0 48px;
   background: transparent;
+  
+  @media (max-width: 1024px) {
+    padding: 24px 32px 0 32px;
+  }
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 16px 0 16px;
+  }
 `;
 
 const Logo = styled.span`
@@ -35,7 +46,14 @@ const Logo = styled.span`
 
 const TopBtnGroup = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+  
+  @media (max-width: 768px) {
+    justify-content: center;
+    gap: 12px;
+  }
 `;
 
 const TopBtn = styled.button`
@@ -47,10 +65,43 @@ const TopBtn = styled.button`
   border-radius: 16px;
   padding: 14px 36px;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1);
-  transition: background 0.2s;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.15);
+  transition: all 0.2s;
   &:hover {
     background: #1746a0;
+    transform: translateY(-1px);
+  }
+`;
+
+const LogoutBtn = styled.button`
+  background: #dc3545;
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 16px;
+  padding: 14px 36px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(220, 53, 69, 0.15);
+  transition: all 0.2s;
+  &:hover {
+    background: #c82333;
+    transform: translateY(-1px);
+  }
+`;
+
+const UserWelcome = styled.span`
+  font-size: 1.1rem;
+  color: #2563eb;
+  font-weight: 600;
+  margin-right: 16px;
+  white-space: nowrap;
+  
+  @media (max-width: 768px) {
+    margin-right: 0;
+    margin-bottom: 8px;
+    font-size: 1rem;
+    text-align: center;
   }
 `;
 
@@ -92,6 +143,29 @@ const MainDesc = styled.p`
   font-family:
     'Noto Sans KR', 'Pretendard', '맑은 고딕', 'Nanum Gothic', 'Roboto',
     sans-serif;
+`;
+
+const DashboardBtn = styled.button`
+  background: linear-gradient(135deg, #2563eb 0%, #1746a0 100%);
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 20px;
+  padding: 18px 48px;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.25);
+  transition: all 0.3s;
+  margin-top: 12px;
+  
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35);
+  }
+  
+  &:active {
+    transform: translateY(-1px);
+  }
 `;
 
 const InfoSection = styled.div`
@@ -137,13 +211,29 @@ const InfoCardDesc = styled.span`
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
+  const { isAuthenticated, user, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/start');
+  };
+
   return (
     <Wrapper>
       <TopBar>
         <Logo>Solicare 시니어 포탈</Logo>
         <TopBtnGroup>
-          <TopBtn onClick={() => navigate('/login')}>로그인</TopBtn>
-          <TopBtn onClick={() => navigate('/login')}>회원가입</TopBtn>
+          {isAuthenticated ? (
+            <>
+              <UserWelcome>👋 {user?.name}님 안녕하세요!</UserWelcome>
+              <LogoutBtn onClick={handleLogout}>로그아웃</LogoutBtn>
+            </>
+          ) : (
+            <>
+              <TopBtn onClick={() => navigate('/login')}>로그인</TopBtn>
+              <TopBtn onClick={() => navigate('/login')}>회원가입</TopBtn>
+            </>
+          )}
         </TopBtnGroup>
       </TopBar>
       <MainBody>
@@ -155,6 +245,11 @@ const HomePage: React.FC = () => {
             <br />
             쉽고 편리하게 건강을 관리하고, 다양한 정보와 소통을 경험하세요.
           </MainDesc>
+          {isAuthenticated && (
+            <DashboardBtn onClick={() => navigate('/dashboard')}>
+              🚀 대시보드로 이동
+            </DashboardBtn>
+          )}
         </MainCard>
         <InfoSection>
           <InfoCard>

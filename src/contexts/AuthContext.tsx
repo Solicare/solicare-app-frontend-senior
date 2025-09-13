@@ -48,24 +48,69 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     // Check if user is already logged in
-    const token = Cookies.get('authToken');
-    if (token) {
+    const accessToken = Cookies.get('accessToken') || Cookies.get('authToken');
+    if (accessToken) {
       // In a real app, you would verify the token with the server
-      // For now, we'll just check if it exists
-      setIsAuthenticated(true);
-      setUser({ name: '사용자', id: '1' });
+      // For now, we'll just check if it exists and validate basic JWT structure
+      try {
+        // Basic JWT structure validation (header.payload.signature)
+        const tokenParts = accessToken.split('.');
+        if (tokenParts.length === 3 || accessToken.startsWith('mock-jwt-token-')) {
+          setIsAuthenticated(true);
+          setUser({ name: '테스트 사용자', id: '1' });
+        }
+      } catch (error) {
+        console.error('Invalid token format:', error);
+        Cookies.remove('accessToken');
+        Cookies.remove('authToken');
+      }
     }
     setLoading(false);
   }, []);
 
+  const generateMockJWT = (userId: string, username: string) => {
+    // Mock JWT structure: header.payload.signature
+    const header = { alg: 'HS256', typ: 'JWT' };
+    const payload = {
+      sub: userId,
+      username: username,
+      iat: Math.floor(Date.now() / 1000),
+      exp: Math.floor(Date.now() / 1000) + (7 * 24 * 60 * 60) // 7 days
+    };
+    
+    // Base64 encode (for demo purposes only - real JWT needs proper signing)
+    const encodedHeader = btoa(JSON.stringify(header));
+    const encodedPayload = btoa(JSON.stringify(payload));
+    const signature = btoa('mock-signature-' + Date.now());
+    
+    return `${encodedHeader}.${encodedPayload}.${signature}`;
+  };
+
   const login = async (username: string, password: string) => {
-    // Mock login - in real app, this would be an API call
-    console.log('Attempting to log in with:', { username, password });
-    const mockToken = 'mock-jwt-token-' + Date.now();
-    Cookies.set('authToken', mockToken, { expires: 7 }); // 7 days
-    setIsAuthenticated(true);
-    setUser({ name: '테스트 사용자', id: '1' }); // Set a default user for always successful login
-    return { success: true };
+    try {
+      // Mock login - in real app, this would be an API call
+      console.log('Attempting to log in with:', { username, password });
+      
+      // Generate mock JWT token
+      const accessToken = generateMockJWT('1', username);
+      
+      // Store token in cookie
+      Cookies.set('accessToken', accessToken, { 
+        expires: 7, // 7 days
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict'
+      });
+      
+      // Remove old authToken if exists
+      Cookies.remove('authToken');
+      
+      setIsAuthenticated(true);
+      setUser({ name: '테스트 사용자', id: '1' });
+      
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: '로그인에 실패했습니다.' };
+    }
   };
 
   const signup = async (userData: {
@@ -74,15 +119,34 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     name: string;
     email: string;
   }) => {
-    // Mock signup - in real app, this would be an API call
-    const mockToken = 'mock-jwt-token-' + Date.now();
-    Cookies.set('authToken', mockToken, { expires: 7 });
-    setIsAuthenticated(true);
-    setUser({ name: userData.name, id: '2' });
-    return { success: true };
+    try {
+      // Mock signup - in real app, this would be an API call
+      console.log('Attempting to sign up with:', userData);
+      
+      // Generate mock JWT token
+      const accessToken = generateMockJWT('2', userData.username);
+      
+      // Store token in cookie
+      Cookies.set('accessToken', accessToken, { 
+        expires: 7, // 7 days
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict'
+      });
+      
+      // Remove old authToken if exists
+      Cookies.remove('authToken');
+      
+      setIsAuthenticated(true);
+      setUser({ name: userData.name, id: '2' });
+      
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: '회원가입에 실패했습니다.' };
+    }
   };
 
   const logout = () => {
+    Cookies.remove('accessToken');
     Cookies.remove('authToken');
     setIsAuthenticated(false);
     setUser(null);

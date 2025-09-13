@@ -59,10 +59,31 @@ const MedicationSectionTitle = styled.h3`
 `;
 
 const ContentLayout = styled.div`
-  display: grid;
-  grid-template-columns: 380px 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 32px;
-  align-items: start;
+`;
+
+const TopSummaryCard = styled.div`
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+`;
+
+const SummarySection = styled.div`
+  flex: 0.4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+`;
+
+const WeeklyScheduleSection = styled.div`
+  flex: 0.6;
 `;
 
 const MedicationSummaryCard = styled.div`
@@ -105,8 +126,16 @@ const MedicationProgressBar = styled.div<{ progress: number }>`
 
 const MedicationGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 24px;
+  
+  @media (max-width: 1400px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @media (max-width: 800px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const MedicationCard = styled.div<{ taken: boolean }>`
@@ -262,6 +291,50 @@ const MedicationPage: React.FC = () => {
   const takenCount = medications.filter((med) => med.taken).length;
   const totalCount = medications.length;
 
+  const getNextMedicationTime = () => {
+    const now = new Date();
+    const currentTime = now.getHours() * 60 + now.getMinutes();
+    
+    // 미복용 약물들의 시간을 분으로 변환
+    const upcomingMeds = medications
+      .filter(med => !med.taken)
+      .map(med => {
+        const [hours, minutes] = med.time.split(':').map(Number);
+        const medTime = hours * 60 + minutes;
+        return {
+          ...med,
+          timeInMinutes: medTime
+        };
+      })
+      .sort((a, b) => a.timeInMinutes - b.timeInMinutes);
+
+    if (upcomingMeds.length === 0) {
+      return "모든 약물을 복용했습니다!";
+    }
+
+    // 오늘 남은 약물 중 가장 가까운 시간 찾기
+    let nextMed = upcomingMeds.find(med => med.timeInMinutes > currentTime);
+    
+    if (!nextMed) {
+      // 오늘 남은 약물이 없으면 내일 첫 번째 약물
+      nextMed = upcomingMeds[0];
+      const minutesUntilNext = (24 * 60) - currentTime + nextMed.timeInMinutes;
+      const hoursUntil = Math.floor(minutesUntilNext / 60);
+      const minutesUntil = minutesUntilNext % 60;
+      return `다음 복용까지 ${hoursUntil}시간 ${minutesUntil}분 남았습니다`;
+    }
+
+    const minutesUntilNext = nextMed.timeInMinutes - currentTime;
+    const hoursUntil = Math.floor(minutesUntilNext / 60);
+    const minutesUntil = minutesUntilNext % 60;
+
+    if (hoursUntil > 0) {
+      return `다음 복용까지 ${hoursUntil}시간 ${minutesUntil}분 남았습니다`;
+    } else {
+      return `다음 복용까지 ${minutesUntil}분 남았습니다`;
+    }
+  };
+
   const getTimeStatus = (time: string) => {
     const now = new Date();
     const [hours, minutes] = time.split(':').map(Number);
@@ -293,39 +366,129 @@ const MedicationPage: React.FC = () => {
           <MedicationSectionTitle>오늘의 약 복용</MedicationSectionTitle>
 
           <ContentLayout>
-            {/* 복용 현황 요약 */}
-            <MedicationSummaryCard>
-              <SummaryText>복용 완료</SummaryText>
-              <SummaryValue>
-                {takenCount} / {totalCount}
-              </SummaryValue>
-              <MedicationProgress>
-                <MedicationProgressBar
-                  progress={(takenCount / totalCount) * 100}
-                />
-              </MedicationProgress>
-              <div
-                style={{
-                  marginTop: '20px',
-                  fontSize: '16px',
-                  color: '#666',
-                  padding: '12px',
-                  background: '#f8f9fa',
-                  borderRadius: '8px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                }}
-              >
-                <span role="img" aria-label="reminder">
-                  ⏰
-                </span>
-                다음 복용 시간까지 {totalCount - takenCount}개 남았습니다
-              </div>
-            </MedicationSummaryCard>
+            {/* 위쪽 가로 배치 - 복용 완료 요약 및 주간 스케줄 */}
+            <TopSummaryCard>
+              <SummarySection>
+                <SummaryText>복용 완료</SummaryText>
+                <SummaryValue>
+                  {takenCount} / {totalCount}
+                </SummaryValue>
+                <MedicationProgress>
+                  <MedicationProgressBar
+                    progress={(takenCount / totalCount) * 100}
+                  />
+                </MedicationProgress>
+                <div
+                  style={{
+                    marginTop: '20px',
+                    fontSize: '16px',
+                    color: '#666',
+                    padding: '12px',
+                    background: '#f8f9fa',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                  }}
+                >
+                  <span role="img" aria-label="reminder">
+                    ⏰
+                  </span>
+                  {getNextMedicationTime()}
+                </div>
+              </SummarySection>
 
-            {/* 약물 목록 */}
+              <WeeklyScheduleSection>
+                <div style={{ 
+                  fontSize: '20px', 
+                  fontWeight: 'bold', 
+                  color: '#343a40', 
+                  marginBottom: '20px'
+                }}>
+                  📅 주간 복용 스케줄
+                </div>
+                
+                <div style={{ 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  gap: '12px'
+                }}>
+                  {['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'].map((day, index) => {
+                    const isToday = index === new Date().getDay() - 1 || (new Date().getDay() === 0 && index === 6);
+                    
+                    // 요일별 약물 스케줄 정의
+                    const weeklyMedications: { [key: number]: string[] } = {
+                      0: ['혈압약', '당뇨약', '비타민'], // 월요일
+                      1: ['혈압약', '당뇨약', '비타민', '관절약'], // 화요일
+                      2: ['혈압약', '당뇨약'], // 수요일 (가벼운 날)
+                      3: ['혈압약', '당뇨약', '비타민', '소화제'], // 목요일
+                      4: ['혈압약', '당뇨약', '비타민'], // 금요일
+                      5: ['혈압약', '관절약', '수면보조제'], // 토요일 (주말 스케줄)
+                      6: ['혈압약', '비타민', '수면보조제'] // 일요일 (주말 스케줄)
+                    };
+                    
+                    const dayMedications: string[] = weeklyMedications[index] || ['혈압약', '당뇨약'];
+                    
+                    return (
+                      <div 
+                        key={day}
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          padding: '12px 16px',
+                          background: isToday ? '#e3f2fd' : '#f8f9fa',
+                          borderRadius: '8px',
+                          border: isToday ? '2px solid #2196f3' : '1px solid #e9ecef'
+                        }}
+                      >
+                        <div style={{ 
+                          fontSize: '16px', 
+                          fontWeight: isToday ? 'bold' : 'normal',
+                          color: isToday ? '#1976d2' : '#666',
+                          minWidth: '60px'
+                        }}>
+                          {day}
+                          {isToday && <span style={{ fontSize: '12px', marginLeft: '4px' }}>(오늘)</span>}
+                        </div>
+                        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                          {dayMedications.map((medName: string, medIndex: number) => {
+                            // 오늘인 경우 실제 복용 상태 확인
+                            let medStatus = 'default';
+                            if (isToday) {
+                              const actualMed = medications.find(m => m.name === medName);
+                              if (actualMed) {
+                                medStatus = actualMed.taken ? 'taken' : 'not-taken';
+                              }
+                            }
+                            
+                            return (
+                              <div
+                                key={medIndex}
+                                style={{
+                                  fontSize: '12px',
+                                  padding: '4px 8px',
+                                  background: isToday && medStatus === 'taken' ? '#4caf50' : 
+                                            isToday && medStatus === 'not-taken' ? '#ff9800' : '#e0e0e0',
+                                  color: isToday && medStatus !== 'default' ? 'white' : '#666',
+                                  borderRadius: '12px',
+                                  fontWeight: '500'
+                                }}
+                              >
+                                {medName}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </WeeklyScheduleSection>
+            </TopSummaryCard>
+
+            {/* 아래쪽 4개 약물 카드 1행 배치 */}
             <MedicationGrid>
               {medications.map((medication) => {
                 const timeStatus = getTimeStatus(medication.time);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { mockExerciseData, mockMedications } from '../data/mockData';
+import { mockExerciseData, mockMedications, mockDietData, mockNotifications } from '../data/mockData';
 import styled from 'styled-components';
 import {
   GridContainer,
@@ -9,49 +9,48 @@ import {
   StatusBadge,
 } from '../components/StyledComponents';
 
-const MAX_WIDTH = 1280;
-
-// New Styled Components for Dashboard
-const TopBar = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #f8f9fa;
-  font-size: 14px;
-  color: #343a40;
-`;
+const MAX_WIDTH = 1400;
 
 const DashboardWrapper = styled.div`
+  width: 100%;
   min-height: 100vh;
   background-color: #f7f9fb;
   font-family: 'Pretendard', 'Roboto', 'Noto Sans KR', sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100vw;
+  display: block;
+  margin: 0;
+  padding: 20px 0;
+  box-sizing: border-box;
 `;
 
 const DashboardBody = styled.div`
-  width: 100vw;
+  width: 100%;
   max-width: ${MAX_WIDTH}px;
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 0 24px 32px 24px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 32px;
-  align-items: center;
+  gap: 24px;
+
+  @media (max-width: 768px) {
+    padding: 0 16px 24px 16px;
+    gap: 20px;
+  }
 `;
 
 const HeaderWrapper = styled.div`
-  width: 100vw;
+  width: 100%;
   max-width: ${MAX_WIDTH}px;
   background-color: white;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  margin: 32px auto 32px auto;
+  margin: 0 auto 24px auto;
   border-radius: 24px;
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    margin: 0 auto 20px auto;
+    border-radius: 16px;
+  }
 `;
 
 const Header = styled.header`
@@ -59,25 +58,36 @@ const Header = styled.header`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: ${MAX_WIDTH}px;
-  margin: 0 auto;
-  padding: 32px 48px;
+  padding: 32px 40px;
   box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    padding: 24px 20px;
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
 `;
 
 const WelcomeText = styled.h1`
-  font-size: 2.4rem;
+  font-size: 2.2rem;
   color: #2563eb;
   margin: 0;
   font-weight: 800;
-  margin-bottom: 0;
+  white-space: nowrap;
+
+  @media (max-width: 768px) {
+    font-size: 1.8rem;
+    white-space: normal;
+    text-align: center;
+  }
 `;
 
 const DashboardCard = styled.div`
   background: white;
-  border-radius: 24px;
-  padding: 48px 40px;
-  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.1);
+  border-radius: 20px;
+  padding: 32px 24px;
+  box-shadow: 0 6px 24px rgba(37, 99, 235, 0.08);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -86,33 +96,55 @@ const DashboardCard = styled.div`
   transition: transform 0.2s ease-in-out;
   min-width: 0;
   width: 100%;
-  min-height: 320px;
+  min-height: 280px;
   box-sizing: border-box;
-  margin-bottom: 32px;
 
   &:hover {
-    transform: translateY(-5px);
+    transform: translateY(-3px);
+  }
+
+  @media (max-width: 768px) {
+    padding: 24px 16px;
+    min-height: 240px;
+    border-radius: 16px;
   }
 `;
 
 const CardTitle = styled.h3`
-  font-size: 2rem;
+  font-size: 1.5rem;
   color: #2563eb;
   font-weight: 700;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
+  line-height: 1.3;
+
+  @media (max-width: 768px) {
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+  }
 `;
 
 const CardValue = styled.p<{ color?: string }>`
-  font-size: 44px;
+  font-size: 2.5rem;
   font-weight: bold;
   color: ${(props) => props.color || '#007bff'};
-  margin: 10px 0;
+  margin: 8px 0;
+  line-height: 1.2;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
 `;
 
 const CardDescription = styled.p`
-  font-size: 18px;
-  color: #888;
-  margin-bottom: 25px;
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 20px;
+  line-height: 1.5;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+  }
 `;
 
 const CardButton = styled.button<{ variant?: 'primary' | 'secondary' }>`
@@ -138,34 +170,78 @@ const CardButton = styled.button<{ variant?: 'primary' | 'secondary' }>`
 const NotificationCard = styled(DashboardCard)`
   text-align: left;
   align-items: flex-start;
-  margin-top: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 24px;
+  padding: 20px;
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    margin-bottom: 16px;
+    padding: 16px;
+  }
+`;
+
+const NotificationScrollContainer = styled.div`
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 8px 0 12px 0;
+  margin-top: 16px;
+  width: 100%;
+  
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+  }
+  
+  &::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+  }
 `;
 
 const NotificationItem = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  min-width: 280px;
+  flex-shrink: 0;
+  padding: 16px;
+  background-color: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease-in-out;
 
-  &:last-child {
-    margin-bottom: 0;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 `;
 
-const NotificationText = styled.p`
-  margin: 0;
-  font-size: 17px;
+const NotificationTitle = styled.h4`
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
   color: #343a40;
+`;
 
-  &.time {
-    color: #6c757d;
-    font-size: 15px;
-  }
+const NotificationMessage = styled.p`
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: #6c757d;
+  line-height: 1.4;
+`;
+
+const NotificationTime = styled.span`
+  font-size: 12px;
+  color: #adb5bd;
+  font-weight: 500;
 `;
 
 const Dashboard: React.FC = () => {
@@ -184,15 +260,9 @@ const Dashboard: React.FC = () => {
 
   return (
     <DashboardWrapper>
-      <TopBar>
-        <div>안녕하세요, 사용자님!</div>
-        <a href="#" style={{ color: '#007bff', textDecoration: 'none' }}>
-          로그아웃
-        </a>
-      </TopBar>
       <HeaderWrapper>
         <Header>
-          <WelcomeText>안녕하세요, {user?.name}님!</WelcomeText>
+          <WelcomeText>안녕하세요, 사용자님!</WelcomeText>
           <NavButton onClick={logout}>로그아웃</NavButton>
         </Header>
       </HeaderWrapper>
@@ -211,21 +281,16 @@ const Dashboard: React.FC = () => {
             {today}
           </div>
           <CardTitle>🔔 오늘의 알림</CardTitle>
-          {mockMedications
-            .filter((med) => !med.taken)
-            .map((med) => (
-              <NotificationItem key={med.id}>
-                <div>
-                  <NotificationText style={{ fontWeight: 'bold' }}>
-                    {med.name} ({med.dosage})
-                  </NotificationText>
-                  <NotificationText className="time">
-                    {med.time} - {med.note}
-                  </NotificationText>
-                </div>
-                <StatusBadge status="not-taken">미복용</StatusBadge>
+          
+          <NotificationScrollContainer>
+            {mockNotifications.map((notification) => (
+              <NotificationItem key={notification.id}>
+                <NotificationTitle>{notification.title}</NotificationTitle>
+                <NotificationMessage>{notification.message}</NotificationMessage>
+                <NotificationTime>{notification.time}</NotificationTime>
               </NotificationItem>
             ))}
+          </NotificationScrollContainer>
         </NotificationCard>
 
         <GridContainer>
@@ -236,8 +301,98 @@ const Dashboard: React.FC = () => {
               {takenMedications} / {totalMedications}
             </CardValue>
             <CardDescription>복용 완료</CardDescription>
-            <CardButton onClick={() => navigate('/medication')}>
+            
+            {/* 복용 기록 섹션 추가 */}
+            <div style={{ 
+              marginTop: '20px', 
+              padding: '16px', 
+              backgroundColor: '#f8f9fa', 
+              borderRadius: '8px' 
+            }}>
+              <div style={{ 
+                fontSize: '16px', 
+                fontWeight: '600', 
+                marginBottom: '8px',
+                color: '#2563eb'
+              }}>
+                📋 복용 기록
+              </div>
+              <div style={{
+                margin: '8px 0',
+                fontSize: '14px',
+                color: '#007bff',
+                fontWeight: 600,
+              }}>
+                최근 7일간 복용률:{' '}
+                <span style={{ color: '#28a745', fontWeight: 700 }}>86%</span>
+              </div>
+              <div style={{
+                margin: '4px 0 12px 0',
+                fontSize: '12px',
+                color: '#ff9800',
+                fontWeight: 500,
+              }}>
+                복용 성공! 건강을 지키고 있어요 👍
+              </div>
+            </div>
+            
+            <CardButton 
+              onClick={() => navigate('/medication')}
+              style={{ marginTop: '16px' }}
+            >
               약 복용 확인하기
+            </CardButton>
+          </DashboardCard>
+
+          {/* 식단 관리 */}
+          <DashboardCard>
+            <CardTitle>🍽️ 식단 관리</CardTitle>
+            <CardValue color="#ff5722">
+              {mockDietData.today.consumedCalories} / {mockDietData.today.targetCalories}
+            </CardValue>
+            <CardDescription>오늘 섭취 칼로리</CardDescription>
+            
+            {/* 식단 현황 섹션 */}
+            <div style={{ 
+              marginTop: '20px', 
+              padding: '16px', 
+              backgroundColor: '#f8f9fa', 
+              borderRadius: '8px' 
+            }}>
+              <div style={{ 
+                fontSize: '16px', 
+                fontWeight: '600', 
+                marginBottom: '8px',
+                color: '#ff5722'
+              }}>
+                🥗 오늘의 식단
+              </div>
+              <div style={{
+                margin: '8px 0',
+                fontSize: '14px',
+                color: '#ff5722',
+                fontWeight: 600,
+              }}>
+                완료된 끼니:{' '}
+                <span style={{ color: '#28a745', fontWeight: 700 }}>
+                  {mockDietData.today.mealsCompleted} / {mockDietData.today.totalMeals}
+                </span>
+              </div>
+              <div style={{
+                margin: '4px 0 12px 0',
+                fontSize: '12px',
+                color: '#ff9800',
+                fontWeight: 500,
+              }}>
+                균형 잡힌 식단으로 건강을 챙겨요! 🌟
+              </div>
+            </div>
+            
+            <CardButton 
+              onClick={() => navigate('/diet')}
+              style={{ marginTop: '16px' }}
+            >
+              식단 관리하기
             </CardButton>
           </DashboardCard>
 
@@ -251,101 +406,49 @@ const Dashboard: React.FC = () => {
               {mockExerciseData.today.distance} •{' '}
               {mockExerciseData.today.duration}
             </CardDescription>
-            <CardButton onClick={() => navigate('/exercise')}>
-              운동 기록 보기
-            </CardButton>
-          </DashboardCard>
-
-          {/* 이웃과 활동량 비교 */}
-          <DashboardCard>
-            <CardTitle>🏆 이웃과 활동량 비교</CardTitle>
-            <CardDescription>
-              <>
-                내가 속한 동네 평균 걸음 수<br />
-                <span
-                  style={{
-                    fontWeight: 700,
-                    color: '#007bff',
-                    fontSize: '22px',
-                  }}
-                >
-                  4,200보
-                </span>
-                <br />내 걸음 수<br />
-                <span
-                  style={{
-                    fontWeight: 700,
-                    color: '#28a745',
-                    fontSize: '22px',
-                  }}
-                >
-                  {mockExerciseData.today.steps.toLocaleString()}보
-                </span>
-              </>
-            </CardDescription>
-            <div
-              style={{
-                margin: '16px 0',
-                fontWeight: 600,
-                color: '#ff9800',
-                fontSize: '18px',
-              }}
-            >
-              상위 35%입니다! 👏
-            </div>
-            <CardButton
-              onClick={() => alert('상세 비교 페이지는 준비 중입니다.')}
-            >
-              자세히 보기
-            </CardButton>
-          </DashboardCard>
-
-          {/* 복용 기록 확인 */}
-          <DashboardCard>
-            <CardTitle>📋 복용 기록</CardTitle>
-            <CardDescription>
-              <>
-                지난 7일간의
-                <br />
-                약물 복용 기록을 확인하세요
-              </>
-            </CardDescription>
-            <div
-              style={{
-                margin: '12px 0',
-                fontSize: '18px',
-                color: '#007bff',
-                fontWeight: 600,
-              }}
-            >
-              최근 7일간 복용률:{' '}
-              <span style={{ color: '#28a745', fontWeight: 700 }}>86%</span>
-            </div>
-            <div
-              style={{
+            
+            {/* 이웃 비교 섹션 추가 */}
+            <div style={{ 
+              marginTop: '20px', 
+              padding: '16px', 
+              backgroundColor: '#f8f9fa', 
+              borderRadius: '8px' 
+            }}>
+              <div style={{ 
+                fontSize: '16px', 
+                fontWeight: '600', 
+                marginBottom: '8px',
+                color: '#28a745'
+              }}>
+                👥 이웃과 비교
+              </div>
+              <div style={{
                 margin: '8px 0',
-                fontSize: '16px',
+                fontSize: '14px',
+                color: '#28a745',
+                fontWeight: 600,
+              }}>
+                이웃 평균:{' '}
+                <span style={{ color: '#6c757d', fontWeight: 500 }}>
+                  {mockExerciseData.neighborComparison.neighborAverage.toLocaleString()}보
+                </span>
+              </div>
+              <div style={{
+                margin: '4px 0 12px 0',
+                fontSize: '12px',
                 color: '#ff9800',
                 fontWeight: 500,
-              }}
-            >
-              복용 성공! 건강을 지키고 있어요 👍
+              }}>
+                🏆 {mockExerciseData.neighborComparison.ranking}로 우수해요!
+              </div>
             </div>
-            <CardButton
-              style={{ marginBottom: '8px' }}
-              onClick={() => navigate('/medication/history')}
+            
+            <CardButton 
+              onClick={() => navigate('/exercise')}
+              style={{ marginTop: '16px' }}
             >
-              기록 확인하기
+              운동 기록 보기
             </CardButton>
-            <CardButton
-              variant="secondary"
-              onClick={() => alert('복용 알림 설정 기능은 준비 중입니다.')}
-            >
-              복용 알림 설정하기
-            </CardButton>
-            <div style={{ marginTop: '10px', fontSize: '14px', color: '#888' }}>
-              복용 기록을 달력으로 볼 수 있어요
-            </div>
           </DashboardCard>
 
           {/* AI 음성 채팅 */}

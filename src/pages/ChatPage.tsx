@@ -19,6 +19,22 @@ const ChatWrapper = styled.div`
   font-family: 'Roboto', sans-serif;
   display: flex;
   flex-direction: column;
+  max-width: 1200px;
+  margin: 0 auto;
+  
+  @media (max-width: 1400px) {
+    max-width: 1000px;
+  }
+  
+  @media (max-width: 1200px) {
+    max-width: 900px;
+    padding: 20px;
+  }
+  
+  @media (max-width: 768px) {
+    max-width: 100%;
+    padding: 15px;
+  }
 `;
 
 const ChatHeader = styled.div`
@@ -30,6 +46,11 @@ const ChatHeader = styled.div`
   padding: 20px 30px;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  
+  @media (max-width: 768px) {
+    padding: 15px 20px;
+    margin-bottom: 20px;
+  }
 `;
 
 const PageTitle = styled.h2`
@@ -49,14 +70,25 @@ const ChatContainer = styled.div`
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  min-height: 500px;
+  
+  @media (max-width: 768px) {
+    padding: 15px;
+    min-height: 400px;
+  }
 `;
 
 const MessageBubble = styled.div<{ type: 'user' | 'ai' }>`
-  max-width: 75%;
+  max-width: 70%;
   padding: 15px 20px;
   border-radius: 20px;
   margin-bottom: 15px;
   line-height: 1.4;
+  
+  @media (max-width: 768px) {
+    max-width: 85%;
+    padding: 12px 16px;
+  }
   font-size: 16px;
 
   background-color: ${(props) =>
@@ -99,6 +131,11 @@ const InputArea = styled.div`
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   padding: 15px 20px;
   margin-bottom: 20px;
+  
+  @media (max-width: 768px) {
+    padding: 12px 15px;
+    gap: 8px;
+  }
 `;
 
 const ChatInput = styled.input`
@@ -112,6 +149,11 @@ const ChatInput = styled.input`
   &:focus {
     border-color: #007bff;
     outline: none;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 10px 12px;
+    font-size: 14px;
   }
 `;
 
@@ -142,6 +184,33 @@ const SendButton = styled.button<{ disabled?: boolean }>`
     color: #a0a0a0;
     cursor: not-allowed;
     transform: none;
+  }
+`;
+
+const VoiceButton = styled.button<{ isListening?: boolean }>`
+  padding: 12px;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
+  background-color: ${(props) => (props.isListening ? '#dc3545' : '#87ceeb')};
+  color: white;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+
+  &:hover {
+    background-color: ${(props) => (props.isListening ? '#c82333' : '#00bfff')};
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 `;
 
@@ -187,6 +256,7 @@ const ChatPage: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>(mockChatHistory);
   const [inputMessage, setInputMessage] = useState<string>('');
   const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [isListening, setIsListening] = useState<boolean>(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -257,6 +327,21 @@ const ChatPage: React.FC = () => {
   //   }
   // };
 
+  const handleVoiceInput = () => {
+    if (isListening) {
+      setIsListening(false);
+      // Stop listening logic would go here
+    } else {
+      setIsListening(true);
+      // Start listening logic would go here
+      // For now, we'll simulate voice input
+      setTimeout(() => {
+        setInputMessage('오늘 약을 먹었는지 확인해주세요');
+        setIsListening(false);
+      }, 2000);
+    }
+  };
+
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleSendMessage();
@@ -293,6 +378,9 @@ const ChatPage: React.FC = () => {
           onChange={(e) => setInputMessage(e.target.value)}
           onKeyPress={handleKeyPress}
         />
+        <VoiceButton onClick={handleVoiceInput} isListening={isListening}>
+          {isListening ? '⏹️' : '🎤'}
+        </VoiceButton>
         <SendButton onClick={handleSendMessage} disabled={!inputMessage.trim()}>
           전송
         </SendButton>

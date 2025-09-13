@@ -15,19 +15,23 @@ export const MediumText = styled.h2`
 // Grid Layout
 export const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, minmax(500px, 1fr));
-  gap: 32px;
-  margin-bottom: 40px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
   width: 100%;
-  max-width: 1800px;
+  max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
 
-  @media (max-width: 900px) {
+  @media (max-width: 1400px) {
     grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
   }
-  @media (max-width: 600px) {
+  
+  @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
   }
 `;
 
