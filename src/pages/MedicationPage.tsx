@@ -275,10 +275,104 @@ const StatisticValue = styled.p`
   margin: 0;
 `;
 
+const AddMedicationForm = styled.div`
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  margin-bottom: 32px;
+`;
+
+const FormRow = styled.div`
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  align-items: end;
+`;
+
+const FormGroup = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+`;
+
+const FormLabel = styled.label`
+  font-size: 16px;
+  font-weight: 600;
+  color: #343a40;
+  margin-bottom: 8px;
+`;
+
+const FormInput = styled.input`
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  
+  &:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  }
+`;
+
+const FormSelect = styled.select`
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  
+  &:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  }
+`;
+
+const AddButton = styled.button`
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+  height: fit-content;
+  
+  &:hover {
+    background: #218838;
+  }
+`;
+
+const DeleteButton = styled.button`
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+  margin-left: 10px;
+  
+  &:hover {
+    background: #c82333;
+  }
+`;
+
 const MedicationPage: React.FC = () => {
   const navigate = useNavigate();
   const [medications, setMedications] = useState(mockMedications);
   const [showHistory, setShowHistory] = useState(false);
+  
+  // 새 약 추가 폼 상태
+  const [newMedName, setNewMedName] = useState('');
+  const [newMedTime, setNewMedTime] = useState('');
+  const [newMedDosage, setNewMedDosage] = useState('');
+  const [newMedNote, setNewMedNote] = useState('');
 
   const toggleMedication = (id: number) => {
     setMedications(
@@ -286,6 +380,37 @@ const MedicationPage: React.FC = () => {
         med.id === id ? { ...med, taken: !med.taken } : med
       )
     );
+  };
+
+  const addMedication = () => {
+    if (newMedName.trim() && newMedTime.trim() && newMedDosage.trim()) {
+      const newMed = {
+        id: Date.now(),
+        name: newMedName,
+        time: newMedTime,
+        dosage: newMedDosage,
+        note: newMedNote || '',
+        taken: false
+      };
+      
+      setMedications([...medications, newMed]);
+      
+      // 폼 초기화
+      setNewMedName('');
+      setNewMedTime('');
+      setNewMedDosage('');
+      setNewMedNote('');
+    }
+  };
+
+  const deleteMedication = (id: number) => {
+    setMedications(medications.filter(med => med.id !== id));
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      addMedication();
+    }
   };
 
   const takenCount = medications.filter((med) => med.taken).length;
@@ -364,6 +489,53 @@ const MedicationPage: React.FC = () => {
       {!showHistory ? (
         <>
           <MedicationSectionTitle>오늘의 약 복용</MedicationSectionTitle>
+
+          {/* 새 약 추가 폼 */}
+          <AddMedicationForm>
+            <h3 style={{ marginBottom: '20px', color: '#343a40' }}>새 약 추가</h3>
+            <FormRow>
+              <FormGroup>
+                <FormLabel>약 이름</FormLabel>
+                <FormInput
+                  type="text"
+                  placeholder="약 이름을 입력하세요"
+                  value={newMedName}
+                  onChange={(e) => setNewMedName(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                />
+              </FormGroup>
+              <FormGroup>
+                <FormLabel>복용 시간</FormLabel>
+                <FormInput
+                  type="time"
+                  value={newMedTime}
+                  onChange={(e) => setNewMedTime(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                />
+              </FormGroup>
+              <FormGroup>
+                <FormLabel>복용량</FormLabel>
+                <FormInput
+                  type="text"
+                  placeholder="1정, 1알 등"
+                  value={newMedDosage}
+                  onChange={(e) => setNewMedDosage(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                />
+              </FormGroup>
+              <FormGroup>
+                <FormLabel>메모 (선택)</FormLabel>
+                <FormInput
+                  type="text"
+                  placeholder="식후 복용 등"
+                  value={newMedNote}
+                  onChange={(e) => setNewMedNote(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                />
+              </FormGroup>
+              <AddButton onClick={addMedication}>추가</AddButton>
+            </FormRow>
+          </AddMedicationForm>
 
           <ContentLayout>
             {/* 위쪽 가로 배치 - 복용 완료 요약 및 주간 스케줄 */}
@@ -565,6 +737,9 @@ const MedicationPage: React.FC = () => {
                       >
                         {medication.taken ? '복용 취소' : '복용하기'}
                       </MedicationButton>
+                      <DeleteButton onClick={() => deleteMedication(medication.id)}>
+                        삭제
+                      </DeleteButton>
                     </div>
                   </MedicationCard>
                 );

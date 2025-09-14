@@ -78,6 +78,40 @@ const Button = styled.button<{
   }
 `;
 
+const Select = styled.select`
+  width: 100%;
+  padding: 22px;
+  margin-bottom: 24px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 14px;
+  font-size: 1.25rem;
+  background: #f7f9fb;
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    border-color: #2563eb;
+    outline: none;
+  }
+`;
+
+const TextArea = styled.textarea`
+  width: 100%;
+  padding: 22px;
+  margin-bottom: 24px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 14px;
+  font-size: 1.25rem;
+  background: #f7f9fb;
+  transition: border-color 0.3s ease;
+  resize: vertical;
+  min-height: 80px;
+
+  &:focus {
+    border-color: #2563eb;
+    outline: none;
+  }
+`;
+
 const ErrorText = styled.p`
   color: #e74c3c;
   font-size: 1.1rem;
@@ -96,14 +130,18 @@ const LoginPage: React.FC = () => {
     username: '',
     password: '',
     name: '',
-    email: '',
+    gender: '',
+    age: '',
+    phone: '',
+    address: '',
+    notes: '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login, signup } = useAuth();
   const navigate = useNavigate();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -166,16 +204,8 @@ const LoginPage: React.FC = () => {
               <Input
                 type="text"
                 name="name"
-                placeholder="이름을 입력하세요"
+                placeholder="이름"
                 value={formData.name}
-                onChange={handleInputChange}
-                required
-              />
-              <Input
-                type="email"
-                name="email"
-                placeholder="이메일을 입력하세요"
-                value={formData.email}
                 onChange={handleInputChange}
                 required
               />
@@ -185,7 +215,7 @@ const LoginPage: React.FC = () => {
           <Input
             type="text"
             name="username"
-            placeholder="아이디를 입력하세요"
+            placeholder={isLogin ? "아이디를 입력하세요" : "ID"}
             value={formData.username}
             onChange={handleInputChange}
             required
@@ -194,11 +224,63 @@ const LoginPage: React.FC = () => {
           <Input
             type="password"
             name="password"
-            placeholder="비밀번호를 입력하세요"
+            placeholder={isLogin ? "비밀번호를 입력하세요" : "PW"}
             value={formData.password}
             onChange={handleInputChange}
             required
           />
+
+          {!isLogin && (
+            <>
+              <Select
+                name="gender"
+                value={formData.gender}
+                onChange={handleInputChange}
+                required
+              >
+                <option value="">성별 선택</option>
+                <option value="남성">남성</option>
+                <option value="여성">여성</option>
+              </Select>
+
+              <Input
+                type="number"
+                name="age"
+                placeholder="나이"
+                value={formData.age}
+                onChange={handleInputChange}
+                required
+                min="0"
+                max="120"
+              />
+
+              <Input
+                type="tel"
+                name="phone"
+                placeholder="전화번호"
+                value={formData.phone}
+                onChange={handleInputChange}
+                required
+              />
+
+              <Input
+                type="text"
+                name="address"
+                placeholder="주소"
+                value={formData.address}
+                onChange={handleInputChange}
+                required
+              />
+
+              <TextArea
+                name="notes"
+                placeholder="특이사항"
+                value={formData.notes}
+                onChange={handleInputChange}
+                rows={3}
+              />
+            </>
+          )}
 
           <Button type="submit" disabled={loading}>
             {loading ? '처리중...' : isLogin ? '로그인' : '회원가입'}
@@ -214,7 +296,16 @@ const LoginPage: React.FC = () => {
           onClick={() => {
             setIsLogin(!isLogin);
             setError('');
-            setFormData({ username: '', password: '', name: '', email: '' });
+            setFormData({ 
+              username: '', 
+              password: '', 
+              name: '', 
+              gender: '', 
+              age: '', 
+              phone: '', 
+              address: '', 
+              notes: '' 
+            });
           }}
         >
           {isLogin ? '회원가입' : '로그인'}

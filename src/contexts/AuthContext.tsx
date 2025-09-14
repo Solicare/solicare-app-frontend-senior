@@ -23,7 +23,11 @@ interface AuthContextType {
     username: string;
     password: string;
     name: string;
-    email: string;
+    gender: string;
+    age: string;
+    phone: string;
+    address: string;
+    notes: string;
   }) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
   loading: boolean;
@@ -120,7 +124,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     username: string;
     password: string;
     name: string;
-    email: string;
+    gender: string;
+    age: string;
+    phone: string;
+    address: string;
+    notes: string;
   }) => {
     try {
       // Mock signup - in real app, this would be an API call

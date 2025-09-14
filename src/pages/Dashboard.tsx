@@ -362,62 +362,68 @@ const Dashboard: React.FC = () => {
           {/* 식단 관리 */}
           <DashboardCard>
             <CardTitle>🍽️ 식단 관리</CardTitle>
-            <CardValue color="#ff5722">
-              {mockDietData.today.consumedCalories} /{' '}
-              {mockDietData.today.targetCalories}
-            </CardValue>
-            <CardDescription>오늘 섭취 칼로리</CardDescription>
-
-            {/* 식단 현황 섹션 */}
+            <CardDescription style={{ marginBottom: '20px' }}>
+              간편하게 식사를 기록하고
+              <br />
+              건강한 식습관을 만들어보세요
+            </CardDescription>
+            
+            {/* 오늘의 추천 메뉴 섹션 */}
             <div
               style={{
-                marginTop: '20px',
+                marginBottom: '20px',
                 padding: '16px',
                 backgroundColor: '#f8f9fa',
                 borderRadius: '8px',
+                border: '1px solid #e9ecef',
               }}
             >
               <div
                 style={{
                   fontSize: '16px',
                   fontWeight: '600',
-                  marginBottom: '8px',
-                  color: '#ff5722',
+                  marginBottom: '12px',
+                  color: '#495057',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
                 }}
               >
-                🥗 오늘의 식단
+                🌟 오늘의 추천 메뉴
               </div>
               <div
                 style={{
-                  margin: '8px 0',
-                  fontSize: '14px',
-                  color: '#ff5722',
-                  fontWeight: 600,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '8px',
                 }}
               >
-                완료된 끼니:{' '}
-                <span style={{ color: '#28a745', fontWeight: 700 }}>
-                  {mockDietData.today.mealsCompleted} /{' '}
-                  {mockDietData.today.totalMeals}
-                </span>
+                <div style={{ fontSize: '14px', color: '#6c757d' }}>
+                  <span style={{ fontWeight: '600', color: '#fd7e14' }}>아침:</span> 현미밥, 된장찌개, 김치
+                </div>
+                <div style={{ fontSize: '14px', color: '#6c757d' }}>
+                  <span style={{ fontWeight: '600', color: '#20c997' }}>점심:</span> 닭가슴살 샐러드, 방울토마토
+                </div>
+                <div style={{ fontSize: '14px', color: '#6c757d' }}>
+                  <span style={{ fontWeight: '600', color: '#6f42c1' }}>저녁:</span> 연어구이, 브로콜리, 현미밥
+                </div>
               </div>
               <div
                 style={{
-                  margin: '4px 0 12px 0',
+                  marginTop: '8px',
                   fontSize: '12px',
-                  color: '#ff9800',
-                  fontWeight: 500,
+                  color: '#28a745',
+                  fontWeight: '500',
                 }}
               >
-                균형 잡힌 식단으로 건강을 챙겨요! 🌟
+                💡 균형잡힌 영양소로 구성된 건강 메뉴입니다
               </div>
             </div>
 
             <CardButton
               onClick={() => navigate('/diet')}
-              style={{ marginTop: '16px' }}
             >
-              식단 관리하기
+              식사 기록하기
             </CardButton>
           </DashboardCard>
 
