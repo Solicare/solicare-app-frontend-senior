@@ -96,7 +96,7 @@ jobs:
               repo: context.repo.repo,
               deployment_id: ${{ needs.build.outputs.deployment_id }},
               state: 'success',
-              environment_url: 'https://www.solicare.kro.kr',
+              environment_url: 'https://care.solicare.kro.kr',
               log_url: `https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ github.job }}`
             })
       - name: Deployment Status Failure
