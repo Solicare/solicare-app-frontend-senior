@@ -13,15 +13,16 @@ const LoginPageContainer = styled.div`
   justify-content: center;
 `;
 
-const LoginCard = styled.div`
+const LoginCard = styled.div<{ isSignup?: boolean }>`
   background: #fff;
   border-radius: 32px;
   box-shadow: 0 8px 32px rgba(37, 99, 235, 0.1);
   width: 100vw;
-  max-width: 520px;
+  max-width: ${(props) => props.isSignup ? '800px' : '520px'};
   padding: 64px 48px 48px 48px;
   text-align: center;
   margin: 0 auto;
+  transition: max-width 0.3s ease;
 `;
 
 const Title = styled.h2`
@@ -112,6 +113,29 @@ const TextArea = styled.textarea`
   }
 `;
 
+const FormGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+`;
+
+const FormRow = styled.div`
+  grid-column: 1 / -1;
+  
+  &.half {
+    grid-column: span 1;
+    
+    @media (max-width: 768px) {
+      grid-column: 1 / -1;
+    }
+  }
+`;
+
 const ErrorText = styled.p`
   color: #e74c3c;
   font-size: 1.1rem;
@@ -193,91 +217,123 @@ const LoginPage: React.FC = () => {
 
   return (
     <LoginPageContainer>
-      <LoginCard>
+      <LoginCard isSignup={!isLogin}>
         <Title>{isLogin ? '로그인' : '회원가입'}</Title>
 
         {error && <ErrorText>{error}</ErrorText>}
 
         <form onSubmit={isLogin ? handleLogin : handleSignup}>
-          {!isLogin && (
+          {!isLogin ? (
+            <FormGrid>
+              <FormRow className="half">
+                <Input
+                  type="text"
+                  name="name"
+                  placeholder="이름"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                />
+              </FormRow>
+
+              <FormRow className="half">
+                <Select
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">성별 선택</option>
+                  <option value="남성">남성</option>
+                  <option value="여성">여성</option>
+                </Select>
+              </FormRow>
+
+              <FormRow className="half">
+                <Input
+                  type="text"
+                  name="username"
+                  placeholder="ID"
+                  value={formData.username}
+                  onChange={handleInputChange}
+                  required
+                />
+              </FormRow>
+
+              <FormRow className="half">
+                <Input
+                  type="password"
+                  name="password"
+                  placeholder="PW"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  required
+                />
+              </FormRow>
+
+              <FormRow className="half">
+                <Input
+                  type="number"
+                  name="age"
+                  placeholder="나이"
+                  value={formData.age}
+                  onChange={handleInputChange}
+                  required
+                  min="0"
+                  max="120"
+                />
+              </FormRow>
+
+              <FormRow className="half">
+                <Input
+                  type="tel"
+                  name="phone"
+                  placeholder="전화번호"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  required
+                />
+              </FormRow>
+
+              <FormRow>
+                <Input
+                  type="text"
+                  name="address"
+                  placeholder="주소"
+                  value={formData.address}
+                  onChange={handleInputChange}
+                  required
+                />
+              </FormRow>
+
+              <FormRow>
+                <TextArea
+                  name="notes"
+                  placeholder="특이사항"
+                  value={formData.notes}
+                  onChange={handleInputChange}
+                  rows={3}
+                />
+              </FormRow>
+            </FormGrid>
+          ) : (
             <>
               <Input
                 type="text"
-                name="name"
-                placeholder="이름"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-              />
-            </>
-          )}
-
-          <Input
-            type="text"
-            name="username"
-            placeholder={isLogin ? "아이디를 입력하세요" : "ID"}
-            value={formData.username}
-            onChange={handleInputChange}
-            required
-          />
-
-          <Input
-            type="password"
-            name="password"
-            placeholder={isLogin ? "비밀번호를 입력하세요" : "PW"}
-            value={formData.password}
-            onChange={handleInputChange}
-            required
-          />
-
-          {!isLogin && (
-            <>
-              <Select
-                name="gender"
-                value={formData.gender}
-                onChange={handleInputChange}
-                required
-              >
-                <option value="">성별 선택</option>
-                <option value="남성">남성</option>
-                <option value="여성">여성</option>
-              </Select>
-
-              <Input
-                type="number"
-                name="age"
-                placeholder="나이"
-                value={formData.age}
-                onChange={handleInputChange}
-                required
-                min="0"
-                max="120"
-              />
-
-              <Input
-                type="tel"
-                name="phone"
-                placeholder="전화번호"
-                value={formData.phone}
+                name="username"
+                placeholder="아이디를 입력하세요"
+                value={formData.username}
                 onChange={handleInputChange}
                 required
               />
 
               <Input
-                type="text"
-                name="address"
-                placeholder="주소"
-                value={formData.address}
+                type="password"
+                name="password"
+                placeholder="비밀번호를 입력하세요"
+                value={formData.password}
                 onChange={handleInputChange}
                 required
-              />
-
-              <TextArea
-                name="notes"
-                placeholder="특이사항"
-                value={formData.notes}
-                onChange={handleInputChange}
-                rows={3}
               />
             </>
           )}

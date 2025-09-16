@@ -15,12 +15,13 @@ interface Message {
 const ChatWrapper = styled.div`
   padding: 30px;
   background-color: #f0f2f5;
-  min-height: 100vh;
+  height: 100vh;
   font-family: 'Roboto', sans-serif;
   display: flex;
   flex-direction: column;
   max-width: 1200px;
   margin: 0 auto;
+  overflow: hidden;
 
   @media (max-width: 1400px) {
     max-width: 1000px;
@@ -70,11 +71,13 @@ const ChatContainer = styled.div`
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  min-height: 500px;
+  height: calc(100vh - 350px);
+  max-height: 500px;
 
   @media (max-width: 768px) {
     padding: 15px;
-    min-height: 400px;
+    height: calc(100vh - 320px);
+    max-height: 400px;
   }
 `;
 
