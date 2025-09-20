@@ -18,7 +18,7 @@ const LoginCard = styled.div<{ isSignup?: boolean }>`
   border-radius: 32px;
   box-shadow: 0 8px 32px rgba(37, 99, 235, 0.1);
   width: 100vw;
-  max-width: ${(props) => props.isSignup ? '800px' : '520px'};
+  max-width: ${(props) => (props.isSignup ? '800px' : '520px')};
   padding: 64px 48px 48px 48px;
   text-align: center;
   margin: 0 auto;
@@ -117,7 +117,7 @@ const FormGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
-  
+
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
     gap: 0;
@@ -126,10 +126,10 @@ const FormGrid = styled.div`
 
 const FormRow = styled.div`
   grid-column: 1 / -1;
-  
+
   &.half {
     grid-column: span 1;
-    
+
     @media (max-width: 768px) {
       grid-column: 1 / -1;
     }
@@ -165,7 +165,11 @@ const LoginPage: React.FC = () => {
   const { login, signup } = useAuth();
   const navigate = useNavigate();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -352,15 +356,15 @@ const LoginPage: React.FC = () => {
           onClick={() => {
             setIsLogin(!isLogin);
             setError('');
-            setFormData({ 
-              username: '', 
-              password: '', 
-              name: '', 
-              gender: '', 
-              age: '', 
-              phone: '', 
-              address: '', 
-              notes: '' 
+            setFormData({
+              username: '',
+              password: '',
+              name: '',
+              gender: '',
+              age: '',
+              phone: '',
+              address: '',
+              notes: '',
             });
           }}
         >

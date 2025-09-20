@@ -51,7 +51,7 @@ const RetryButton = styled.button`
 
 class ErrorBoundary extends Component<Props, State> {
   public state: State = {
-    hasError: false
+    hasError: false,
   };
 
   public static getDerivedStateFromError(error: Error): State {
@@ -77,9 +77,7 @@ class ErrorBoundary extends Component<Props, State> {
             <br />
             다시 시도해 주세요.
           </ErrorMessage>
-          <RetryButton onClick={this.handleRetry}>
-            홈으로 돌아가기
-          </RetryButton>
+          <RetryButton onClick={this.handleRetry}>홈으로 돌아가기</RetryButton>
         </ErrorContainer>
       );
     }

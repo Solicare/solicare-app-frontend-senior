@@ -367,7 +367,7 @@ const Dashboard: React.FC = () => {
               <br />
               건강한 식습관을 만들어보세요
             </CardDescription>
-            
+
             {/* 오늘의 추천 메뉴 섹션 */}
             <div
               style={{
@@ -399,13 +399,22 @@ const Dashboard: React.FC = () => {
                 }}
               >
                 <div style={{ fontSize: '14px', color: '#6c757d' }}>
-                  <span style={{ fontWeight: '600', color: '#fd7e14' }}>아침:</span> 현미밥, 된장찌개, 김치
+                  <span style={{ fontWeight: '600', color: '#fd7e14' }}>
+                    아침:
+                  </span>{' '}
+                  현미밥, 된장찌개, 김치
                 </div>
                 <div style={{ fontSize: '14px', color: '#6c757d' }}>
-                  <span style={{ fontWeight: '600', color: '#20c997' }}>점심:</span> 닭가슴살 샐러드, 방울토마토
+                  <span style={{ fontWeight: '600', color: '#20c997' }}>
+                    점심:
+                  </span>{' '}
+                  닭가슴살 샐러드, 방울토마토
                 </div>
                 <div style={{ fontSize: '14px', color: '#6c757d' }}>
-                  <span style={{ fontWeight: '600', color: '#6f42c1' }}>저녁:</span> 연어구이, 브로콜리, 현미밥
+                  <span style={{ fontWeight: '600', color: '#6f42c1' }}>
+                    저녁:
+                  </span>{' '}
+                  연어구이, 브로콜리, 현미밥
                 </div>
               </div>
               <div
@@ -420,9 +429,7 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
 
-            <CardButton
-              onClick={() => navigate('/diet')}
-            >
+            <CardButton onClick={() => navigate('/diet')}>
               식사 기록하기
             </CardButton>
           </DashboardCard>

@@ -323,7 +323,7 @@ const FormInput = styled.input`
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 16px;
-  
+
   &:focus {
     outline: none;
     border-color: #007bff;
@@ -336,7 +336,7 @@ const FormSelect = styled.select`
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 16px;
-  
+
   &:focus {
     outline: none;
     border-color: #007bff;
@@ -353,7 +353,7 @@ const FormTextArea = styled.textarea`
   min-height: 40px;
   max-height: 80px;
   font-family: inherit;
-  
+
   &:focus {
     outline: none;
     border-color: #007bff;
@@ -374,13 +374,13 @@ const CheckboxItem = styled.label`
   gap: 8px;
   cursor: pointer;
   user-select: none;
-  
-  input[type="checkbox"] {
+
+  input[type='checkbox'] {
     width: 18px;
     height: 18px;
     cursor: pointer;
   }
-  
+
   span {
     font-size: 16px;
     color: #343a40;
@@ -392,7 +392,7 @@ const FormGridContainer = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 20px;
   margin-bottom: 25px;
-  
+
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
   }
@@ -409,7 +409,7 @@ const AddButton = styled.button`
   font-weight: 600;
   transition: background-color 0.2s;
   height: fit-content;
-  
+
   &:hover {
     background: #218838;
   }
@@ -432,7 +432,7 @@ const ResetButton = styled.button`
   transition: background-color 0.2s;
   height: fit-content;
   margin-left: 10px;
-  
+
   &:hover {
     background: #5a6268;
   }
@@ -449,7 +449,7 @@ const DeleteButton = styled.button`
   font-weight: 600;
   transition: background-color 0.2s;
   margin-left: 10px;
-  
+
   &:hover {
     background: #c82333;
   }
@@ -468,7 +468,7 @@ const CardDeleteButton = styled.button`
   font-size: 12px;
   font-weight: 600;
   transition: background-color 0.2s;
-  
+
   &:hover {
     background: #c82333;
   }
@@ -478,7 +478,7 @@ const MedicationPage: React.FC = () => {
   const navigate = useNavigate();
   const [medications, setMedications] = useState(mockMedications);
   const [showHistory, setShowHistory] = useState(false);
-  
+
   // 새 약 추가 폼 상태 - 상세 정보
   const [newMedication, setNewMedication] = useState({
     name: '',
@@ -486,39 +486,42 @@ const MedicationPage: React.FC = () => {
     dailyDosage: '',
     memo: '',
     daysOfWeek: [] as string[],
-    timeSlots: [] as string[]
+    timeSlots: [] as string[],
   });
 
   const weekDays = ['월', '화', '수', '목', '금', '토', '일'];
   const timeSlotOptions = [
     '아침 (06:00-09:00)',
-    '점심 (11:00-14:00)', 
+    '점심 (11:00-14:00)',
     '저녁 (17:00-20:00)',
-    '취침 전 (21:00-23:00)'
+    '취침 전 (21:00-23:00)',
   ];
 
   const handleDayOfWeekChange = (day: string) => {
-    setNewMedication(prev => ({
+    setNewMedication((prev) => ({
       ...prev,
       daysOfWeek: prev.daysOfWeek.includes(day)
-        ? prev.daysOfWeek.filter(d => d !== day)
-        : [...prev.daysOfWeek, day]
+        ? prev.daysOfWeek.filter((d) => d !== day)
+        : [...prev.daysOfWeek, day],
     }));
   };
 
   const handleTimeSlotChange = (timeSlot: string) => {
-    setNewMedication(prev => ({
+    setNewMedication((prev) => ({
       ...prev,
       timeSlots: prev.timeSlots.includes(timeSlot)
-        ? prev.timeSlots.filter(t => t !== timeSlot)
-        : [...prev.timeSlots, timeSlot]
+        ? prev.timeSlots.filter((t) => t !== timeSlot)
+        : [...prev.timeSlots, timeSlot],
     }));
   };
 
   const addMedication = () => {
-    if (newMedication.name.trim() && newMedication.dailyDosage.trim() && 
-        newMedication.daysOfWeek.length > 0 && newMedication.timeSlots.length > 0) {
-      
+    if (
+      newMedication.name.trim() &&
+      newMedication.dailyDosage.trim() &&
+      newMedication.daysOfWeek.length > 0 &&
+      newMedication.timeSlots.length > 0
+    ) {
       const newMed = {
         id: Date.now(),
         name: newMedication.name,
@@ -529,13 +532,17 @@ const MedicationPage: React.FC = () => {
         timeSlots: newMedication.timeSlots,
         taken: false,
         // 기존 인터페이스 호환성을 위한 필드들
-        time: newMedication.timeSlots[0]?.includes('아침') ? '08:00' : 
-              newMedication.timeSlots[0]?.includes('점심') ? '12:00' :
-              newMedication.timeSlots[0]?.includes('저녁') ? '18:00' : '21:00',
+        time: newMedication.timeSlots[0]?.includes('아침')
+          ? '08:00'
+          : newMedication.timeSlots[0]?.includes('점심')
+            ? '12:00'
+            : newMedication.timeSlots[0]?.includes('저녁')
+              ? '18:00'
+              : '21:00',
         dosage: newMedication.dailyDosage,
-        note: newMedication.memo
+        note: newMedication.memo,
       };
-      
+
       setMedications([...medications, newMed]);
       resetForm();
     } else {
@@ -550,7 +557,7 @@ const MedicationPage: React.FC = () => {
       dailyDosage: '',
       memo: '',
       daysOfWeek: [],
-      timeSlots: []
+      timeSlots: [],
     });
   };
 
@@ -563,7 +570,7 @@ const MedicationPage: React.FC = () => {
   };
 
   const deleteMedication = (id: number) => {
-    setMedications(medications.filter(med => med.id !== id));
+    setMedications(medications.filter((med) => med.id !== id));
   };
 
   const takenCount = medications.filter((med) => med.taken).length;
@@ -645,8 +652,16 @@ const MedicationPage: React.FC = () => {
 
           {/* 새 약 추가 폼 */}
           <AddMedicationForm>
-            <h3 style={{ marginBottom: '25px', color: '#343a40', fontSize: '24px' }}>새 약 추가</h3>
-            
+            <h3
+              style={{
+                marginBottom: '25px',
+                color: '#343a40',
+                fontSize: '24px',
+              }}
+            >
+              새 약 추가
+            </h3>
+
             <FormGridContainer>
               <FormGroup>
                 <FormLabel>약 이름 *</FormLabel>
@@ -654,17 +669,27 @@ const MedicationPage: React.FC = () => {
                   type="text"
                   placeholder="약 이름을 입력하세요"
                   value={newMedication.name}
-                  onChange={(e) => setNewMedication(prev => ({...prev, name: e.target.value}))}
+                  onChange={(e) =>
+                    setNewMedication((prev) => ({
+                      ...prev,
+                      name: e.target.value,
+                    }))
+                  }
                 />
               </FormGroup>
-              
+
               <FormGroup>
                 <FormLabel>총 복용량 (하루 기준) *</FormLabel>
                 <FormInput
                   type="text"
                   placeholder="예: 1정 2회, 1알 3번 등"
                   value={newMedication.dailyDosage}
-                  onChange={(e) => setNewMedication(prev => ({...prev, dailyDosage: e.target.value}))}
+                  onChange={(e) =>
+                    setNewMedication((prev) => ({
+                      ...prev,
+                      dailyDosage: e.target.value,
+                    }))
+                  }
                 />
               </FormGroup>
             </FormGridContainer>
@@ -675,7 +700,12 @@ const MedicationPage: React.FC = () => {
                 <FormTextArea
                   placeholder="약의 효능, 작용 등을 간단히 입력하세요"
                   value={newMedication.description}
-                  onChange={(e) => setNewMedication(prev => ({...prev, description: e.target.value}))}
+                  onChange={(e) =>
+                    setNewMedication((prev) => ({
+                      ...prev,
+                      description: e.target.value,
+                    }))
+                  }
                   rows={1}
                 />
               </FormGroup>
@@ -687,7 +717,12 @@ const MedicationPage: React.FC = () => {
                 <FormTextArea
                   placeholder="기타 메모사항을 자유롭게 입력하세요"
                   value={newMedication.memo}
-                  onChange={(e) => setNewMedication(prev => ({...prev, memo: e.target.value}))}
+                  onChange={(e) =>
+                    setNewMedication((prev) => ({
+                      ...prev,
+                      memo: e.target.value,
+                    }))
+                  }
                   rows={1}
                 />
               </FormGroup>
@@ -697,7 +732,7 @@ const MedicationPage: React.FC = () => {
               <FormGroup>
                 <FormLabel>먹어야 하는 요일 *</FormLabel>
                 <CheckboxGroup>
-                  {weekDays.map(day => (
+                  {weekDays.map((day) => (
                     <CheckboxItem key={day}>
                       <input
                         type="checkbox"
@@ -713,7 +748,7 @@ const MedicationPage: React.FC = () => {
               <FormGroup>
                 <FormLabel>먹어야 하는 시간대 *</FormLabel>
                 <CheckboxGroup>
-                  {timeSlotOptions.map(timeSlot => (
+                  {timeSlotOptions.map((timeSlot) => (
                     <CheckboxItem key={timeSlot}>
                       <input
                         type="checkbox"
@@ -727,7 +762,14 @@ const MedicationPage: React.FC = () => {
               </FormGroup>
             </FormGridContainer>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '20px' }}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                gap: '10px',
+                marginTop: '20px',
+              }}
+            >
               <ResetButton onClick={resetForm}>초기화</ResetButton>
               <AddButton onClick={addMedication}>약 추가</AddButton>
             </div>
@@ -907,46 +949,50 @@ const MedicationPage: React.FC = () => {
                 const timeStatus = getTimeStatus(medication.time || '08:00');
                 // 타입 안전성을 위한 확장된 타입 정의
                 const med = medication as Medication;
-                
+
                 return (
                   <MedicationCard key={medication.id} taken={medication.taken}>
-                    <CardDeleteButton onClick={() => deleteMedication(medication.id)}>
+                    <CardDeleteButton
+                      onClick={() => deleteMedication(medication.id)}
+                    >
                       삭제
                     </CardDeleteButton>
-                    
+
                     <MedicationContent>
                       <MedicationName>{medication.name}</MedicationName>
-                      
+
                       {/* 약 설명을 먼저 표시 */}
                       {med.description && (
-                        <MedicationTimeDosage style={{ color: '#666', marginBottom: '8px' }}>
+                        <MedicationTimeDosage
+                          style={{ color: '#666', marginBottom: '8px' }}
+                        >
                           📋 {med.description}
                         </MedicationTimeDosage>
                       )}
-                      
+
                       {/* 총 복용량을 약 설명 아래에 표시 */}
                       <MedicationTimeDosage>
                         💊 {med.dailyDosage || medication.dosage || '정보 없음'}
                       </MedicationTimeDosage>
-                      
+
                       {med.daysOfWeek && med.daysOfWeek.length > 0 && (
                         <MedicationTimeDosage>
                           📅 {med.daysOfWeek.join(', ')}요일
                         </MedicationTimeDosage>
                       )}
-                      
+
                       {med.timeSlots && med.timeSlots.length > 0 && (
                         <MedicationTimeDosage>
                           ⏰ {med.timeSlots.join(', ')}
                         </MedicationTimeDosage>
                       )}
-                      
+
                       {medication.time && (
                         <MedicationTimeDosage>
                           🕒 {medication.time}
                         </MedicationTimeDosage>
                       )}
-                      
+
                       {(med.memo || medication.note) && (
                         <MedicationNote>
                           📝 {med.memo || medication.note}

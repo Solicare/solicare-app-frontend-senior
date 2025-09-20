@@ -7,7 +7,8 @@ const mockChatHistory = [
   {
     id: 1,
     type: 'ai' as const,
-    message: '안녕하세요! 건강 관리 도우미입니다. 오늘은 어떤 도움이 필요하신가요?',
+    message:
+      '안녕하세요! 건강 관리 도우미입니다. 오늘은 어떤 도움이 필요하신가요?',
     timestamp: '2024-03-14 09:00',
   },
   {
@@ -19,7 +20,8 @@ const mockChatHistory = [
   {
     id: 3,
     type: 'ai' as const,
-    message: '좋습니다! 오늘 걸음 수를 확인해보니 6,500걸음 걸으셨네요. 목표량까지 3,500걸음 더 필요합니다. 오후에 가벼운 산책을 추천드려요!',
+    message:
+      '좋습니다! 오늘 걸음 수를 확인해보니 6,500걸음 걸으셨네요. 목표량까지 3,500걸음 더 필요합니다. 오후에 가벼운 산책을 추천드려요!',
     timestamp: '2024-03-14 09:02',
   },
 ];
@@ -147,7 +149,9 @@ const SendButton = styled.button<{ disabled?: boolean }>`
   cursor: pointer;
   background-color: #007bff;
   color: white;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 
   &:hover {
     background-color: #0056b3;
@@ -175,7 +179,9 @@ const VoiceButton = styled.button`
   cursor: pointer;
   background-color: #87ceeb;
   color: white;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -212,7 +218,9 @@ const QuickQuestionButton = styled.button`
   color: #007bff;
   font-size: 14px;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
   margin-right: 10px;
   margin-bottom: 10px;
 
@@ -239,12 +247,24 @@ const ChatPage: React.FC = () => {
 
   const generateAIResponse = (userInput: string) => {
     const input = userInput.toLowerCase();
-    
-    if (input.includes('약') || input.includes('복용') || input.includes('먹었')) {
+
+    if (
+      input.includes('약') ||
+      input.includes('복용') ||
+      input.includes('먹었')
+    ) {
       return '약 복용 관리는 정말 중요하죠! 현재 등록된 약물들의 복용 상태를 확인해보니, 꾸준히 잘 관리하고 계시는 것 같아요. 정해진 시간에 복용하는 것이 효과적입니다.';
-    } else if (input.includes('운동') || input.includes('걸음') || input.includes('활동')) {
+    } else if (
+      input.includes('운동') ||
+      input.includes('걸음') ||
+      input.includes('활동')
+    ) {
       return '운동 기록을 보니 정말 꾸준히 하고 계시네요! 규칙적인 운동은 건강 관리의 핵심이에요. 오늘도 목표량 달성을 위해 화이팅하세요!';
-    } else if (input.includes('건강') || input.includes('상태') || input.includes('컨디션')) {
+    } else if (
+      input.includes('건강') ||
+      input.includes('상태') ||
+      input.includes('컨디션')
+    ) {
       return '전반적인 건강 상태가 안정적으로 보이네요! 약물 복용도 잘 하시고, 운동도 꾸준히 하시니 정말 모범적이세요. 계속 이런 패턴을 유지하시면 좋겠어요.';
     } else if (input.includes('안녕') || input.includes('인사')) {
       return '안녕하세요! 오늘도 건강 관리를 위해 도움이 필요하시면 언제든 말씀해 주세요. 어떤 것부터 확인해보실까요?';
@@ -321,9 +341,7 @@ const ChatPage: React.FC = () => {
           onChange={(e) => setInputMessage(e.target.value)}
           onKeyPress={handleKeyPress}
         />
-        <VoiceButton onClick={handleVoiceInput}>
-          🎤
-        </VoiceButton>
+        <VoiceButton onClick={handleVoiceInput}>🎤</VoiceButton>
         <SendButton onClick={handleSendMessage} disabled={!inputMessage.trim()}>
           전송
         </SendButton>

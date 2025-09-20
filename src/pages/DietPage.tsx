@@ -19,7 +19,7 @@ const DietWrapper = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   box-sizing: border-box;
-  
+
   @media (min-width: 768px) {
     padding: 40px;
   }
@@ -34,7 +34,7 @@ const DietHeader = styled.div`
   padding: 20px;
   border-radius: 16px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  
+
   @media (min-width: 768px) {
     flex-direction: row;
     justify-content: space-between;
@@ -48,7 +48,7 @@ const PageTitle = styled.h2`
   color: #343a40;
   margin: 0;
   font-weight: 700;
-  
+
   @media (min-width: 768px) {
     font-size: 32px;
   }
@@ -60,7 +60,7 @@ const AddMealForm = styled.div`
   border-radius: 12px;
   margin-bottom: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  
+
   @media (min-width: 768px) {
     padding: 20px;
   }
@@ -71,7 +71,7 @@ const FormRow = styled.div`
   flex-direction: column;
   gap: 12px;
   margin-bottom: 15px;
-  
+
   @media (min-width: 768px) {
     flex-direction: row;
     align-items: center;
@@ -88,7 +88,7 @@ const Input = styled.input`
   width: 100%;
   box-sizing: border-box;
   min-width: 0;
-  
+
   &:focus {
     outline: none;
     border-color: #27ae60;
@@ -104,13 +104,13 @@ const Select = styled.select`
   width: 100%;
   box-sizing: border-box;
   background-color: white;
-  
+
   @media (min-width: 768px) {
     min-width: 140px;
     width: auto;
     flex-shrink: 0;
   }
-  
+
   &:focus {
     outline: none;
     border-color: #27ae60;
@@ -130,18 +130,18 @@ const AddButton = styled.button`
   transition: background-color 0.2s;
   width: 100%;
   margin-top: 5px;
-  
+
   @media (min-width: 768px) {
     width: auto;
     margin-top: 0;
     min-width: 100px;
     flex-shrink: 0;
   }
-  
+
   &:hover {
     background: #219a52;
   }
-  
+
   &:active {
     transform: translateY(1px);
   }
@@ -152,7 +152,7 @@ const MealList = styled.div`
   border-radius: 12px;
   padding: 15px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  
+
   @media (min-width: 768px) {
     padding: 20px;
   }
@@ -164,14 +164,14 @@ const MealItem = styled.div`
   gap: 12px;
   padding: 15px 0;
   border-bottom: 1px solid #ecf0f1;
-  
+
   @media (min-width: 768px) {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     gap: 15px;
   }
-  
+
   &:last-child {
     border-bottom: none;
   }
@@ -189,7 +189,7 @@ const MealName = styled.div`
   font-size: 16px;
   line-height: 1.3;
   word-wrap: break-word;
-  
+
   @media (min-width: 768px) {
     margin-bottom: 4px;
   }
@@ -212,16 +212,16 @@ const DeleteButton = styled.button`
   transition: background-color 0.2s;
   align-self: flex-start;
   white-space: nowrap;
-  
+
   @media (min-width: 768px) {
     align-self: center;
     padding: 8px 16px;
   }
-  
+
   &:hover {
     background: #c0392b;
   }
-  
+
   &:active {
     transform: translateY(1px);
   }
@@ -233,7 +233,7 @@ const EmptyMessage = styled.div`
   padding: 30px 20px;
   font-size: 16px;
   line-height: 1.5;
-  
+
   @media (min-width: 768px) {
     padding: 40px;
   }
@@ -242,11 +242,21 @@ const EmptyMessage = styled.div`
 const DietPage: React.FC = () => {
   const navigate = useNavigate();
   const [meals, setMeals] = useState<MealRecord[]>([
-    { id: 1, name: '아침: 계란후라이, 토스트', time: '08:00', date: '2024-09-14' },
+    {
+      id: 1,
+      name: '아침: 계란후라이, 토스트',
+      time: '08:00',
+      date: '2024-09-14',
+    },
     { id: 2, name: '점심: 김치찌개, 밥', time: '12:30', date: '2024-09-14' },
-    { id: 3, name: '저녁: 연어구이, 샐러드', time: '18:00', date: '2024-09-14' },
+    {
+      id: 3,
+      name: '저녁: 연어구이, 샐러드',
+      time: '18:00',
+      date: '2024-09-14',
+    },
   ]);
-  
+
   const [newMealName, setNewMealName] = useState('');
   const [newMealTime, setNewMealTime] = useState('breakfast');
 
@@ -257,30 +267,30 @@ const DietPage: React.FC = () => {
         breakfast: '08:00',
         lunch: '12:00',
         dinner: '18:00',
-        snack: '15:00'
+        snack: '15:00',
       };
-      
+
       const mealTypeLabels = {
         breakfast: '아침',
-        lunch: '점심', 
+        lunch: '점심',
         dinner: '저녁',
-        snack: '간식'
+        snack: '간식',
       };
-      
+
       const newMeal: MealRecord = {
         id: Date.now(),
         name: `${mealTypeLabels[newMealTime as keyof typeof mealTypeLabels]}: ${newMealName}`,
         time: timeLabels[newMealTime as keyof typeof timeLabels],
-        date: now.toISOString().split('T')[0]
+        date: now.toISOString().split('T')[0],
       };
-      
+
       setMeals([...meals, newMeal]);
       setNewMealName('');
     }
   };
 
   const deleteMeal = (id: number) => {
-    setMeals(meals.filter(meal => meal.id !== id));
+    setMeals(meals.filter((meal) => meal.id !== id));
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -299,8 +309,8 @@ const DietPage: React.FC = () => {
       <AddMealForm>
         <h3 style={{ marginBottom: '15px', color: '#2c3e50' }}>새 식사 추가</h3>
         <FormRow>
-          <Select 
-            value={newMealTime} 
+          <Select
+            value={newMealTime}
             onChange={(e) => setNewMealTime(e.target.value)}
           >
             <option value="breakfast">아침</option>
@@ -320,9 +330,13 @@ const DietPage: React.FC = () => {
       </AddMealForm>
 
       <MealList>
-        <h3 style={{ marginBottom: '20px', color: '#2c3e50' }}>오늘의 식사 목록</h3>
+        <h3 style={{ marginBottom: '20px', color: '#2c3e50' }}>
+          오늘의 식사 목록
+        </h3>
         {meals.length === 0 ? (
-          <EmptyMessage>아직 기록된 식사가 없습니다. 첫 식사를 추가해보세요!</EmptyMessage>
+          <EmptyMessage>
+            아직 기록된 식사가 없습니다. 첫 식사를 추가해보세요!
+          </EmptyMessage>
         ) : (
           meals.map((meal) => (
             <MealItem key={meal.id}>
