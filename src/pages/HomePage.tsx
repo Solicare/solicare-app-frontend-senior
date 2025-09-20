@@ -112,6 +112,10 @@ const MainBody = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media (max-width: 768px) {
+    padding: 0 16px;
+  }
 `;
 
 const MainCard = styled.div`
@@ -123,6 +127,17 @@ const MainCard = styled.div`
   padding: 48px 40px 36px 40px;
   text-align: center;
   margin: 36px 0 28px 0;
+  box-sizing: border-box;
+
+  @media (max-width: 1024px) {
+    padding: 36px 32px 28px 32px;
+    margin: 28px 0 20px 0;
+  }
+
+  @media (max-width: 768px) {
+    padding: 32px 24px 24px 24px;
+    margin: 24px 0 20px 0;
+  }
 `;
 
 const MainTitle = styled.h2`
@@ -175,6 +190,7 @@ const InfoSection = styled.div`
   grid-template-columns: repeat(2, 1fr);
   gap: 32px;
   margin-bottom: 48px;
+
   @media (max-width: 1024px) {
     grid-template-columns: 1fr;
     gap: 20px;

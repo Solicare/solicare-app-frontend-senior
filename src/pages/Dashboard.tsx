@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import {
@@ -13,6 +13,19 @@ import {
   NavButton,
   StatusBadge,
 } from '../components/StyledComponents';
+
+interface Medication {
+  id: number;
+  name: string;
+  description: string;
+  dailyDosage: string;
+  memo: string;
+  daysOfWeek: string[];
+  timeSlots: string[];
+  taken: boolean;
+  time?: string;
+  dosage?: string;
+}
 
 const MAX_WIDTH = 1400;
 
@@ -253,6 +266,40 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
 
+  // localStorage에서 약물 데이터 읽어오기
+  const [medications, setMedications] = useState(() => {
+    const savedMedications = localStorage.getItem('medications');
+    return savedMedications ? JSON.parse(savedMedications) : mockMedications;
+  });
+
+  // medications 변경 감지를 위한 useEffect
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const savedMedications = localStorage.getItem('medications');
+      if (savedMedications) {
+        setMedications(JSON.parse(savedMedications));
+      }
+    };
+
+    // storage 이벤트 리스너 추가
+    window.addEventListener('storage', handleStorageChange);
+    
+    // 컴포넌트가 focus될 때마다 데이터 새로고침
+    const handleFocus = () => {
+      const savedMedications = localStorage.getItem('medications');
+      if (savedMedications) {
+        setMedications(JSON.parse(savedMedications));
+      }
+    };
+    
+    window.addEventListener('focus', handleFocus);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('focus', handleFocus);
+    };
+  }, []);
+
   const today = new Date().toLocaleDateString('ko-KR', {
     year: 'numeric',
     month: 'long',
@@ -260,8 +307,8 @@ const Dashboard: React.FC = () => {
     weekday: 'long',
   });
 
-  const takenMedications = mockMedications.filter((med) => med.taken).length;
-  const totalMedications = mockMedications.length;
+  const takenMedications = medications.filter((med: Medication) => med.taken).length;
+  const totalMedications = medications.length;
 
   return (
     <DashboardWrapper>
@@ -386,6 +433,7 @@ const Dashboard: React.FC = () => {
                   color: '#495057',
                   display: 'flex',
                   alignItems: 'center',
+                  justifyContent: 'center',
                   gap: '6px',
                 }}
               >

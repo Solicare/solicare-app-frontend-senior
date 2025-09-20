@@ -53,6 +53,97 @@ const PageTitle = styled.h2`
   font-weight: 700;
 `;
 
+// Modal Styles
+const ModalOverlay = styled.div<{ isOpen: boolean }>`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: ${(props) => (props.isOpen ? 'flex' : 'none')};
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+`;
+
+const ModalContent = styled.div`
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  position: relative;
+
+  @media (max-width: 768px) {
+    max-width: 95%;
+    padding: 20px;
+  }
+`;
+
+const ModalHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e9ecef;
+`;
+
+const ModalTitle = styled.h3`
+  font-size: 24px;
+  color: #343a40;
+  margin: 0;
+  font-weight: 600;
+`;
+
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 32px;
+  color: #6c757d;
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #f8f9fa;
+    color: #343a40;
+  }
+`;
+
+const OpenModalButton = styled.button`
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+`;
+
 const ToggleHistoryButton = styled(NavButton)`
   margin-left: 15px;
   font-size: 18px;
@@ -173,10 +264,19 @@ const MedicationContent = styled.div`
 `;
 
 const MedicationName = styled.h4`
-  font-size: 28px;
+  font-size: 22px;
   color: #343a40;
-  margin: 0 0 12px 0;
+  margin: 0;
   font-weight: 600;
+  flex: 1;
+`;
+
+const MedicationCardHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 12px;
 `;
 
 const MedicationTimeDosage = styled.p`
@@ -456,28 +556,43 @@ const DeleteButton = styled.button`
 `;
 
 const CardDeleteButton = styled.button`
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: #dc3545;
+  background: #fd7e14;
   color: white;
   border: none;
-  padding: 6px 10px;
+  padding: 8px 16px;
   border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  font-size: 12px;
-  font-weight: 600;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 
   &:hover {
-    background: #c82333;
+    background: #e8650e;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 `;
 
 const MedicationPage: React.FC = () => {
   const navigate = useNavigate();
-  const [medications, setMedications] = useState(mockMedications);
+  
+  // localStorage에서 약물 데이터 불러오기
+  const [medications, setMedications] = useState(() => {
+    const savedMedications = localStorage.getItem('medications');
+    return savedMedications ? JSON.parse(savedMedications) : mockMedications;
+  });
+  
   const [showHistory, setShowHistory] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 약물 데이터가 변경될 때마다 localStorage에 저장
+  React.useEffect(() => {
+    localStorage.setItem('medications', JSON.stringify(medications));
+  }, [medications]);
 
   // 새 약 추가 폼 상태 - 상세 정보
   const [newMedication, setNewMedication] = useState({
@@ -561,19 +676,25 @@ const MedicationPage: React.FC = () => {
     });
   };
 
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => {
+    setIsModalOpen(false);
+    resetForm();
+  };
+
   const toggleMedication = (id: number) => {
     setMedications(
-      medications.map((med) =>
+      medications.map((med: Medication) =>
         med.id === id ? { ...med, taken: !med.taken } : med
       )
     );
   };
 
   const deleteMedication = (id: number) => {
-    setMedications(medications.filter((med) => med.id !== id));
+    setMedications(medications.filter((med: Medication) => med.id !== id));
   };
 
-  const takenCount = medications.filter((med) => med.taken).length;
+  const takenCount = medications.filter((med: Medication) => med.taken).length;
   const totalCount = medications.length;
 
   const getNextMedicationTime = () => {
@@ -582,23 +703,31 @@ const MedicationPage: React.FC = () => {
 
     // 미복용 약물들의 시간을 분으로 변환
     const upcomingMeds = medications
-      .filter((med) => !med.taken)
-      .map((med) => {
-        const [hours, minutes] = med.time.split(':').map(Number);
+      .filter((med: Medication) => !med.taken)
+      .map((med: Medication) => {
+        const [hours, minutes] = (med.time || '08:00').split(':').map(Number);
         const medTime = hours * 60 + minutes;
         return {
           ...med,
           timeInMinutes: medTime,
         };
       })
-      .sort((a, b) => a.timeInMinutes - b.timeInMinutes);
+      .sort(
+        (
+          a: Medication & { timeInMinutes: number },
+          b: Medication & { timeInMinutes: number }
+        ) => a.timeInMinutes - b.timeInMinutes
+      );
 
     if (upcomingMeds.length === 0) {
       return '모든 약물을 복용했습니다!';
     }
 
     // 오늘 남은 약물 중 가장 가까운 시간 찾기
-    let nextMed = upcomingMeds.find((med) => med.timeInMinutes > currentTime);
+    let nextMed = upcomingMeds.find(
+      (med: Medication & { timeInMinutes: number }) =>
+        med.timeInMinutes > currentTime
+    );
 
     if (!nextMed) {
       // 오늘 남은 약물이 없으면 내일 첫 번째 약물
@@ -648,132 +777,17 @@ const MedicationPage: React.FC = () => {
 
       {!showHistory ? (
         <>
-          <MedicationSectionTitle>오늘의 약 복용</MedicationSectionTitle>
-
-          {/* 새 약 추가 폼 */}
-          <AddMedicationForm>
-            <h3
-              style={{
-                marginBottom: '25px',
-                color: '#343a40',
-                fontSize: '24px',
-              }}
-            >
-              새 약 추가
-            </h3>
-
-            <FormGridContainer>
-              <FormGroup>
-                <FormLabel>약 이름 *</FormLabel>
-                <FormInput
-                  type="text"
-                  placeholder="약 이름을 입력하세요"
-                  value={newMedication.name}
-                  onChange={(e) =>
-                    setNewMedication((prev) => ({
-                      ...prev,
-                      name: e.target.value,
-                    }))
-                  }
-                />
-              </FormGroup>
-
-              <FormGroup>
-                <FormLabel>총 복용량 (하루 기준) *</FormLabel>
-                <FormInput
-                  type="text"
-                  placeholder="예: 1정 2회, 1알 3번 등"
-                  value={newMedication.dailyDosage}
-                  onChange={(e) =>
-                    setNewMedication((prev) => ({
-                      ...prev,
-                      dailyDosage: e.target.value,
-                    }))
-                  }
-                />
-              </FormGroup>
-            </FormGridContainer>
-
-            <FormFullWidth>
-              <FormGroup>
-                <FormLabel>약 설명</FormLabel>
-                <FormTextArea
-                  placeholder="약의 효능, 작용 등을 간단히 입력하세요"
-                  value={newMedication.description}
-                  onChange={(e) =>
-                    setNewMedication((prev) => ({
-                      ...prev,
-                      description: e.target.value,
-                    }))
-                  }
-                  rows={1}
-                />
-              </FormGroup>
-            </FormFullWidth>
-
-            <FormFullWidth>
-              <FormGroup>
-                <FormLabel>메모</FormLabel>
-                <FormTextArea
-                  placeholder="기타 메모사항을 자유롭게 입력하세요"
-                  value={newMedication.memo}
-                  onChange={(e) =>
-                    setNewMedication((prev) => ({
-                      ...prev,
-                      memo: e.target.value,
-                    }))
-                  }
-                  rows={1}
-                />
-              </FormGroup>
-            </FormFullWidth>
-
-            <FormGridContainer style={{ gap: '40px' }}>
-              <FormGroup>
-                <FormLabel>먹어야 하는 요일 *</FormLabel>
-                <CheckboxGroup>
-                  {weekDays.map((day) => (
-                    <CheckboxItem key={day}>
-                      <input
-                        type="checkbox"
-                        checked={newMedication.daysOfWeek.includes(day)}
-                        onChange={() => handleDayOfWeekChange(day)}
-                      />
-                      <span>{day}요일</span>
-                    </CheckboxItem>
-                  ))}
-                </CheckboxGroup>
-              </FormGroup>
-
-              <FormGroup>
-                <FormLabel>먹어야 하는 시간대 *</FormLabel>
-                <CheckboxGroup>
-                  {timeSlotOptions.map((timeSlot) => (
-                    <CheckboxItem key={timeSlot}>
-                      <input
-                        type="checkbox"
-                        checked={newMedication.timeSlots.includes(timeSlot)}
-                        onChange={() => handleTimeSlotChange(timeSlot)}
-                      />
-                      <span>{timeSlot}</span>
-                    </CheckboxItem>
-                  ))}
-                </CheckboxGroup>
-              </FormGroup>
-            </FormGridContainer>
-
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                gap: '10px',
-                marginTop: '20px',
-              }}
-            >
-              <ResetButton onClick={resetForm}>초기화</ResetButton>
-              <AddButton onClick={addMedication}>약 추가</AddButton>
-            </div>
-          </AddMedicationForm>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '30px',
+            }}
+          >
+            <MedicationSectionTitle>오늘의 약 복용</MedicationSectionTitle>
+            <OpenModalButton onClick={openModal}>+ 새 약 추가</OpenModalButton>
+          </div>
 
           <ContentLayout>
             {/* 위쪽 가로 배치 - 복용 완료 요약 및 주간 스케줄 */}
@@ -901,7 +915,7 @@ const MedicationPage: React.FC = () => {
                               let medStatus = 'default';
                               if (isToday) {
                                 const actualMed = medications.find(
-                                  (m) => m.name === medName
+                                  (m: Medication) => m.name === medName
                                 );
                                 if (actualMed) {
                                   medStatus = actualMed.taken
@@ -945,21 +959,22 @@ const MedicationPage: React.FC = () => {
 
             {/* 아래쪽 4개 약물 카드 1행 배치 */}
             <MedicationGrid>
-              {medications.map((medication) => {
+              {medications.map((medication: Medication) => {
                 const timeStatus = getTimeStatus(medication.time || '08:00');
                 // 타입 안전성을 위한 확장된 타입 정의
                 const med = medication as Medication;
 
                 return (
                   <MedicationCard key={medication.id} taken={medication.taken}>
-                    <CardDeleteButton
-                      onClick={() => deleteMedication(medication.id)}
-                    >
-                      삭제
-                    </CardDeleteButton>
-
                     <MedicationContent>
-                      <MedicationName>{medication.name}</MedicationName>
+                      <MedicationCardHeader>
+                        <MedicationName>{medication.name}</MedicationName>
+                        <CardDeleteButton
+                          onClick={() => deleteMedication(medication.id)}
+                        >
+                          삭제
+                        </CardDeleteButton>
+                      </MedicationCardHeader>
 
                       {/* 약 설명을 먼저 표시 */}
                       {med.description && (
@@ -1194,6 +1209,130 @@ const MedicationPage: React.FC = () => {
           </StatisticsCard>
         </>
       )}
+
+      {/* 새 약 추가 모달 */}
+      <ModalOverlay isOpen={isModalOpen}>
+        <ModalContent>
+          <ModalHeader>
+            <ModalTitle>새 약 추가</ModalTitle>
+            <CloseButton onClick={closeModal}>×</CloseButton>
+          </ModalHeader>
+
+          <FormGridContainer>
+            <FormGroup>
+              <FormLabel>약 이름 *</FormLabel>
+              <FormInput
+                type="text"
+                placeholder="약 이름을 입력하세요"
+                value={newMedication.name}
+                onChange={(e) =>
+                  setNewMedication((prev) => ({
+                    ...prev,
+                    name: e.target.value,
+                  }))
+                }
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <FormLabel>총 복용량 (하루 기준) *</FormLabel>
+              <FormInput
+                type="text"
+                placeholder="예: 1정 2회, 1알 3번 등"
+                value={newMedication.dailyDosage}
+                onChange={(e) =>
+                  setNewMedication((prev) => ({
+                    ...prev,
+                    dailyDosage: e.target.value,
+                  }))
+                }
+              />
+            </FormGroup>
+          </FormGridContainer>
+
+          <FormFullWidth>
+            <FormGroup>
+              <FormLabel>약 설명</FormLabel>
+              <FormTextArea
+                placeholder="약의 효능, 작용 등을 간단히 입력하세요"
+                value={newMedication.description}
+                onChange={(e) =>
+                  setNewMedication((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
+                rows={1}
+              />
+            </FormGroup>
+          </FormFullWidth>
+
+          <FormFullWidth>
+            <FormGroup>
+              <FormLabel>메모</FormLabel>
+              <FormTextArea
+                placeholder="기타 메모사항을 자유롭게 입력하세요"
+                value={newMedication.memo}
+                onChange={(e) =>
+                  setNewMedication((prev) => ({
+                    ...prev,
+                    memo: e.target.value,
+                  }))
+                }
+                rows={1}
+              />
+            </FormGroup>
+          </FormFullWidth>
+
+          <FormGridContainer style={{ gap: '40px' }}>
+            <FormGroup>
+              <FormLabel>먹어야 하는 요일 *</FormLabel>
+              <CheckboxGroup>
+                {weekDays.map((day) => (
+                  <CheckboxItem key={day}>
+                    <input
+                      type="checkbox"
+                      checked={newMedication.daysOfWeek.includes(day)}
+                      onChange={() => handleDayOfWeekChange(day)}
+                    />
+                    <span>{day}요일</span>
+                  </CheckboxItem>
+                ))}
+              </CheckboxGroup>
+            </FormGroup>
+
+            <FormGroup>
+              <FormLabel>먹어야 하는 시간대 *</FormLabel>
+              <CheckboxGroup>
+                {timeSlotOptions.map((timeSlot) => (
+                  <CheckboxItem key={timeSlot}>
+                    <input
+                      type="checkbox"
+                      checked={newMedication.timeSlots.includes(timeSlot)}
+                      onChange={() => handleTimeSlotChange(timeSlot)}
+                    />
+                    <span>{timeSlot}</span>
+                  </CheckboxItem>
+                ))}
+              </CheckboxGroup>
+            </FormGroup>
+          </FormGridContainer>
+
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              gap: '10px',
+              marginTop: '30px',
+              paddingTop: '20px',
+              borderTop: '1px solid #e9ecef',
+            }}
+          >
+            <ResetButton onClick={resetForm}>초기화</ResetButton>
+            <AddButton onClick={addMedication}>약 추가</AddButton>
+          </div>
+        </ModalContent>
+      </ModalOverlay>
     </MedicationWrapper>
   );
 };
